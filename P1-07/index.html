@@ -195,6 +195,30 @@
   .lesson-nav a.dis{color:#b6bfd4;background:#f7f9ff;border-color:#eef1f8;pointer-events:none}
   @media (max-width:420px){ .lesson-nav a{font-size:12px;padding:10px 4px} }
   @media print{ .lesson-nav{display:none} }
+
+  /* ===== 微信下载引导浮层 ===== */
+  .pdf-guide-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;
+    display:flex;align-items:center;justify-content:center;padding:18px;animation:pgfade .15s}
+  .pdf-guide-card{background:#fff;border-radius:14px;padding:22px 20px 18px;
+    max-width:380px;width:100%;box-shadow:0 16px 50px rgba(0,0,0,.3);max-height:90vh;overflow:auto}
+  .pdf-guide-card h3{font-size:16px;margin-bottom:12px;color:#1f2937}
+  .pdf-guide-card .pg-step{background:#f5f7ff;border-left:3px solid #4f6ef7;padding:9px 12px;
+    border-radius:6px;font-size:13px;line-height:1.7;color:#1f2937;margin-bottom:8px}
+  .pdf-guide-card .pg-step b{color:#4f6ef7}
+  .pdf-guide-card .pg-tip{background:#fff8e1;border-left:3px solid #f59e0b;padding:9px 12px;
+    border-radius:6px;font-size:12.5px;line-height:1.7;color:#7c2d12;margin:10px 0 14px}
+  .pdf-guide-card .pg-actrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .pdf-guide-card .pg-act{flex:1;min-width:90px;padding:11px 10px;border-radius:9px;
+    border:1px solid #d1d5db;background:#fff;font-size:13px;font-weight:600;color:#1f2937;
+    cursor:pointer;font-family:inherit}
+  .pdf-guide-card .pg-act.pg-primary{background:#4f6ef7;border-color:#4f6ef7;color:#fff}
+  .pdf-guide-card .pg-act.pg-muted{background:#f3f4f6}
+  .pdf-guide-card .pg-act:active{transform:scale(.97)}
+  .pdf-guide-card .pg-close{position:absolute;top:10px;right:12px;width:28px;height:28px;
+    border-radius:50%;background:#f3f4f6;border:none;font-size:16px;color:#6b7280;cursor:pointer}
+  .pdf-guide-card .pg-wrap{position:relative}
+  @keyframes pgfade{from{opacity:0}to{opacity:1}}
+  @media print{ .pdf-guide-mask{display:none} }
 </style>
 </head>
 <body>
@@ -423,7 +447,7 @@ var showToast = function () {};
   });
 })();
 
-// ===== 下载 PDF（真实文件） =====
+// ===== 下载 PDF（微信里弹引导，其它环境直接下载）=====
 (function () {
   var btn = document.getElementById('pdfBtn');
   var toast = document.getElementById('toast');
@@ -438,15 +462,73 @@ var showToast = function () {};
   var ua = navigator.userAgent || '';
   var isiOS = /iPhone|iPad|iPod/i.test(ua);
   var isWx = /MicroMessenger/i.test(ua);
-  btn.addEventListener('click', function () {
+
+  function closeGuide() {
+    var m = document.getElementById('pdfGuideMask');
+    if (m) m.remove();
+  }
+  function showGuide() {
+    if (document.getElementById('pdfGuideMask')) return;
+    var card = document.createElement('div');
+    card.id = 'pdfGuideMask';
+    card.className = 'pdf-guide-mask';
+    var url = location.href.replace(/[^/]*$/, '');
+    var steps = isiOS
+      ? '<div class="pg-step"><b>iPhone 用户：</b><br>① 点页面右上角「<b>···</b>」<br>② 选「<b>在浏览器打开</b>」<br>③ 在 Safari 顶部的<b>分享图标</b>里选「<b>存储到文件</b>」</div>'
+      : '<div class="pg-step"><b>安卓用户：</b><br>① 点页面右上角「<b>···</b>」<br>② 选「<b>在浏览器打开</b>」<br>③ 在浏览器中下载或转发 PDF</div>';
+    card.innerHTML = '<div class="pdf-guide-card"><div class="pg-wrap">'
+      + '<button class="pg-close" data-act="close" aria-label="关闭">×</button>'
+      + '<h3>用手机保存 PDF</h3>'
+      + steps
+      + '<div class="pg-tip"><b>最省事的办法：</b>在<b>电脑浏览器</b>打开本页链接，会自动下载 PDF；<br>再用微信「<b>文件传输助手</b>」发给孩子。</div>'
+      + '<div class="pg-actrow">'
+      +   '<button class="pg-act pg-primary" data-act="copy">复制本课链接</button>'
+      +   '<button class="pg-act" data-act="try">直接打开 PDF</button>'
+      +   '<button class="pg-act pg-muted" data-act="close">知道了</button>'
+      + '</div></div></div>';
+    document.body.appendChild(card);
+    card.addEventListener('click', function (e) {
+      var act = e.target.getAttribute('data-act');
+      if (!act) { if (e.target === card) closeGuide(); return; }
+      if (act === 'close') { closeGuide(); return; }
+      if (act === 'copy') {
+        var link = location.href;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).then(function () {
+            e.target.textContent = '已复制 ✓';
+          }, function () { fallbackCopy(link, e.target); });
+        } else { fallbackCopy(link, e.target); }
+        return;
+      }
+      if (act === 'try') {
+        closeGuide();
+        // 走默认 a 链接行为（微信里会触发"用浏览器打开"对话框或内置预览）
+        window.location.href = btn.getAttribute('href');
+        return;
+      }
+    });
+  }
+  function fallbackCopy(text, el) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); el.textContent = '已复制 ✓'; }
+    catch (e) { el.textContent = '复制失败'; }
+    document.body.removeChild(ta);
+  }
+
+  btn.addEventListener('click', function (e) {
+    if (isWx) {
+      e.preventDefault();
+      showGuide();
+      return;
+    }
     if (isiOS) {
-      tip('PDF 打开后，点右上角「分享」→「存储到文件 / 打印」即可保存', 6500);
-    } else if (isWx) {
-      tip('正在打开 PDF，可点右上角「…」保存或转发', 5000);
+      tip('PDF 打开后，在 Safari 顶部点分享图标 → 存储到文件 / 打印', 6500);
     } else {
       tip('正在下载 PDF…', 3500);
     }
-    // 不 preventDefault：交给浏览器处理 download / 打开预览
+    // 非微信：让 <a download> 走默认行为
   });
 })();
 </script>
