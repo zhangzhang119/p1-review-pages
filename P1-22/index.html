@@ -152,7 +152,7 @@
   .pdf-btn { position: fixed; top: 16px; right: 16px; z-index: 999; display: inline-flex; align-items: center; gap: 7px;
     background: #fff; color: var(--primary-dark); border: 1px solid #dfe4ff; border-radius: 999px;
     padding: 9px 16px; font-size: 14px; font-weight: 700; font-family: inherit;
-    box-shadow: 0 4px 16px rgba(79,110,247,.22); cursor: pointer; }
+    box-shadow: 0 4px 16px rgba(79,110,247,.22); cursor: pointer; text-decoration: none; }
   .pdf-btn:hover { transform: translateY(-2px); }
   .pdf-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
   .toast { position: fixed; left: 50%; bottom: 26px; z-index: 1000; transform: translateX(-50%) translateY(14px);
@@ -200,12 +200,12 @@
 <body>
 
 <a class="back-btn" href="../">← 目录</a>
-<button class="pdf-btn" id="pdfBtn" type="button" title="保存为 PDF">
+<a class="pdf-btn" id="pdfBtn" href="P1-22.pdf" download title="下载 PDF">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
   </svg>
   下载 PDF
-</button>
+</a>
 <div class="toast" id="toast"></div>
 
 <div class="hero">
@@ -465,40 +465,30 @@ var showToast = function () {};
   });
 })();
 
-// ===== 下载 / 打印 PDF =====
+// ===== 下载 PDF（真实文件） =====
 (function () {
   var btn = document.getElementById('pdfBtn');
   var toast = document.getElementById('toast');
   if (!btn) return;
-  var timer = null;
-  var pdfTimer = null;
-  showToast = function (msg, ms) {
+  var t = null;
+  function tip(msg, ms) {
     if (!toast) return;
     toast.textContent = msg; toast.classList.add('show');
-    clearTimeout(timer);
-    timer = setTimeout(function () { toast.classList.remove('show'); }, ms || 4500);
-  };
-  function pdfTip(msg, ms) {
-    if (!toast) return;
-    toast.textContent = msg; toast.classList.add('show');
-    clearTimeout(pdfTimer);
-    pdfTimer = setTimeout(function () { toast.classList.remove('show'); }, ms || 5000);
+    clearTimeout(t);
+    t = setTimeout(function () { toast.classList.remove('show'); }, ms || 5000);
   }
+  var ua = navigator.userAgent || '';
+  var isiOS = /iPhone|iPad|iPod/i.test(ua);
+  var isWx = /MicroMessenger/i.test(ua);
   btn.addEventListener('click', function () {
-    var ua = navigator.userAgent || '';
-    var saved = document.title;
-    document.title = 'P1-22-卡牌对决下复习';
-    if (/MicroMessenger/i.test(ua)) {
-      pdfTip('微信里请点右上角「…」→ 在浏览器打开，再点本按钮保存 PDF', 6000);
-    } else if (/iPhone|iPad|iPod/i.test(ua)) {
-      pdfTip('弹出预览后，点右上角分享 →「打印 / 存储到文件」即可存为 PDF', 6000);
-    } else if (/Android/i.test(ua)) {
-      pdfTip('打印界面里把「目标打印机」选成「另存为 PDF」再保存', 6000);
+    if (isiOS) {
+      tip('PDF 打开后，点右上角「分享」→「存储到文件 / 打印」即可保存', 6500);
+    } else if (isWx) {
+      tip('正在打开 PDF，可点右上角「…」保存或转发', 5000);
     } else {
-      pdfTip('打印窗口里选择「另存为 PDF」，然后点保存', 6000);
+      tip('正在下载 PDF…', 3500);
     }
-    setTimeout(function () { window.print(); }, 260);
-    setTimeout(function () { document.title = saved; }, 60000);
+    // 不 preventDefault：交给浏览器处理 download / 打开预览
   });
 })();
 </script>
