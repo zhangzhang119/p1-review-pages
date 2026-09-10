@@ -581,6 +581,12 @@ var showToast = function () {};
   }
 
   btn.addEventListener('click', function (e) {
+    if (isWx && isiOS) {
+      e.preventDefault();
+      tip('如弹出“在 Safari 中打开”，选打开后点分享图标 → 存储到文件', 5500);
+      window.location.href = btn.getAttribute('href');
+      return;
+    }
     if (isWx) {
       e.preventDefault();
       showGuide();
