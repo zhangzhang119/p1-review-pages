@@ -341,11 +341,6 @@ scard = m.<span class="fn">select</span>()             <span class="cm"># 选择
             m.<span class="fn">attack</span>(scard, cmp)    <span class="cm"># 攻击类卡牌→攻击</span>
         <span class="kw">else</span>:
             m.<span class="fn">heal</span>(scard, player)   <span class="cm"># 其它卡牌→治愈</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">lack energy        （能量不足时输出）
-或发动攻击 / 治愈（正常出牌时）</div>
-    </div>
   </div>
 
   <!-- 出两张牌 -->
@@ -365,11 +360,6 @@ scard = m.<span class="fn">select</span>()             <span class="cm"># 选择
     <span class="kw">else</span>:
         m.<span class="fn">combine</span>(scard)         <span class="cm"># 发动组合技</span>
         energy = energy - <span class="num">2</span>       <span class="cm"># 消耗 2 点能量</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">lack energy        （能量不足时输出）
-或发动组合技（正常出两张牌时）</div>
-    </div>
   </div>
 
   <!-- 其它数量 -->
@@ -383,15 +373,10 @@ scard = m.<span class="fn">select</span>()             <span class="cm"># 选择
     <pre><span class="cm"># 任务一、二代码已完成</span>
 <span class="kw">else</span>:
     m.<span class="fn">print</span>(<span class="str">"error"</span>)           <span class="cm"># 提示组合错误</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">error</div>
-    </div>
   </div>
 
   <nav class="lesson-nav">
     <a href="../P1-20/">← 上一课</a>
-    <a href="../">目录</a>
     <a href="../P1-22/">下一课 →</a>
   </nav>
   <footer>P1-21 · 卡牌对决(上) 学习手册复习页 · 每天看一遍，代码记得牢！</footer>

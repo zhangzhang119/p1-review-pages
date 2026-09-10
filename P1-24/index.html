@@ -340,10 +340,6 @@ hp2 = <span class="num">80</span>
         m.<span class="fn">shoot</span>(player)            <span class="cm"># 玩家射击</span>
     <span class="kw">if</span> m.<span class="fn">hit</span>(player, boss):       <span class="cm"># 命中 boss</span>
         hp2 = hp2 - <span class="num">1</span>               <span class="cm"># boss 血量减 1</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">（玩家移动并射击，命中 boss 时 boss 血量从 80 减少）</div>
-    </div>
   </div>
 
   <!-- boss -->
@@ -362,10 +358,6 @@ hp1 = <span class="num">20</span>
     m.<span class="fn">skill</span>(boss)                <span class="cm"># boss 释放技能</span>
     <span class="kw">if</span> m.<span class="fn">hit</span>(boss, player):       <span class="cm"># 技能命中玩家</span>
         hp1 = hp1 - <span class="num">1</span>               <span class="cm"># 玩家血量减 1</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">（boss 不断移动并放技能，命中玩家时玩家血量从 20 减少）</div>
-    </div>
   </div>
 
   <!-- 游戏结束 -->
@@ -387,17 +379,10 @@ hp2 = <span class="num">80</span>
     <span class="kw">if</span> hp1 &lt;= <span class="num">0</span>:                 <span class="cm"># 玩家血量耗尽</span>
         m.<span class="fn">print</span>(<span class="str">"lose"</span>)          <span class="cm"># 提示失败</span>
         <span class="kw">break</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">win
-（或）
-lose</div>
-    </div>
   </div>
 
   <nav class="lesson-nav">
     <a href="../P1-23/">← 上一课</a>
-    <a href="../">目录</a>
     <a class="dis" href="#">下一课 →</a>
   </nav>
   <footer>P1-24 · 火力全开 学习手册复习页 · 每天看一遍，代码记得牢！</footer>

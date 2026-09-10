@@ -342,10 +342,6 @@ obs.y = obs.y - <span class="num">6</span>             <span class="cm"># 障碍
         ball.x = ball.x - <span class="num">10</span>      <span class="cm"># 雪球左移</span>
     <span class="kw">if</span> m.<span class="fn">key</span>() == <span class="str">"right"</span>:       <span class="cm"># 按下右键</span>
         ball.x = ball.x + <span class="num">10</span>      <span class="cm"># 雪球右移</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">（雪球随键盘左右键在窗口中左右移动）</div>
-    </div>
   </div>
 
   <!-- 障碍物 -->
@@ -365,10 +361,6 @@ obs.y = obs.y - <span class="num">6</span>             <span class="cm"># 障碍
         obs.y = <span class="num">180</span>                   <span class="cm"># 回到窗口顶部</span>
     <span class="kw">if</span> m.<span class="fn">collide</span>(obs, ball):        <span class="cm"># 碰到雪球</span>
         <span class="kw">break</span>                          <span class="cm"># 游戏结束</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">（障碍物持续下落，碰到雪球时游戏结束）</div>
-    </div>
   </div>
 
   <!-- 金币 -->
@@ -388,16 +380,10 @@ obs.y = obs.y - <span class="num">6</span>             <span class="cm"># 障碍
     <span class="kw">if</span> coin.y &lt; -<span class="num">180</span> <span class="kw">or</span> m.<span class="fn">collide</span>(coin, ball):  <span class="cm"># 到底或碰雪球</span>
         coin.y = <span class="num">180</span>                 <span class="cm"># 回到窗口顶部</span>
         coin.x = random.<span class="fn">randint</span>(-<span class="num">100</span>, <span class="num">100</span>) <span class="cm"># 随机左右位置</span></pre>
-    <div class="preview">
-      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
-      <div class="pv-body">score = 1
-（每吃到一枚金币，分数加 1）</div>
-    </div>
   </div>
 
   <nav class="lesson-nav">
     <a href="../P1-22/">← 上一课</a>
-    <a href="../">目录</a>
     <a href="../P1-24/">下一课 →</a>
   </nav>
   <footer>P1-23 · 滑雪大冒险 学习手册复习页 · 每天看一遍，代码记得牢！</footer>
