@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="16wXuYqmx6CFTrjCTn7viV">
+<head data-page-node-id="VMV0wrMHCwSWfMb1vWwfI0">
+<meta charset="UTF-8" data-page-node-id="UuoQvbi1BP3Ll2LI3QFo6n">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="zdI6dunOuWtywebFJJW8xC">
+<title>VR空间 · 第2课 海龟绘图知识点复习</title>
+<style>
+  :root {
+    --primary: #4f6ef7;
+    --primary-dark: #3b55d9;
+    --accent: #ffb703;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --text: #2b2f3a;
+    --muted: #6b7280;
+    --code-bg: #1e1e2e;
+    --code-text: #e6e6ef;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(79, 110, 247, 0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 40px;
+  }
+
+  /* ===== 顶部横幅 ===== */
+  .hero {
+    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cf0 55%, #9d4edd 100%);
+    color: #fff;
+    padding: 44px 20px 68px;
+    text-align: center;
+    position: relative;
+  }
+  .hero .lesson-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35);
+    border-radius: 999px;
+    padding: 4px 16px;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .hero h1 { font-size: clamp(24px, 5vw, 38px); letter-spacing: 2px; }
+  .hero p.sub { margin-top: 10px; opacity: 0.92; font-size: 15px; }
+  .hero .dots {
+    position: absolute;
+    bottom: -34px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 14px;
+  }
+  .hero .dots span {
+    width: 68px; height: 68px; border-radius: 50%;
+    border: 5px solid var(--bg);
+    box-shadow: var(--shadow);
+  }
+  .d1 { background: #22b573; }
+  .d2 { background: var(--accent); }
+  .d3 { background: #ef476f; }
+
+  /* ===== 主体 ===== */
+  .container { max-width: 980px; margin: 0 auto; padding: 30px 18px 0; }
+
+  /* ===== 本课目标 ===== */
+  .goals {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px; margin-top: 26px;
+  }
+  .goal {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #fff; border-radius: 12px; padding: 10px 14px;
+    font-size: 14px; box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+  }
+  .goal:nth-child(2) { border-left-color: #22b573; }
+  .goal:nth-child(3) { border-left-color: var(--accent); }
+  .goal .g-n { font-weight: 800; color: var(--primary); }
+  .goal:nth-child(2) .g-n { color: #158a56; }
+  .goal:nth-child(3) .g-n { color: #c98a00; }
+
+  .section-title {
+    display: flex; align-items: center; gap: 10px;
+    margin: 36px 0 18px;
+    font-size: 20px; font-weight: 700;
+  }
+  .section-title .num {
+    width: 34px; height: 34px; border-radius: 10px;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+
+  /* ===== 知识卡片 ===== */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 22px;
+    border-top: 5px solid var(--primary);
+    transition: transform .2s;
+  }
+  .card:hover { transform: translateY(-4px); }
+  .card.green { border-top-color: #22b573; }
+  .card.yellow { border-top-color: var(--accent); }
+  .card.pink { border-top-color: #ef476f; }
+  .card.purple { border-top-color: #9d4edd; }
+  .word { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .word .en { font-size: 25px; font-weight: 800; color: var(--primary-dark); font-family: Consolas, monospace; }
+  .card.green .word .en { color: #158a56; }
+  .card.yellow .word .en { color: #c98a00; }
+  .card.pink .word .en { color: #d63a63; }
+  .card.purple .word .en { color: #7b3fbf; }
+  .word .ipa { font-size: 15px; color: var(--muted); }
+  .word .cn { font-size: 16px; font-weight: 600; }
+  /* 单词朗读按钮 */
+  .speak-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; margin-left: auto;
+    background: linear-gradient(135deg, #4f6ef7, #7c5cf0);
+    color: #fff; border: none; border-radius: 50%;
+    font-size: 15px; cursor: pointer;
+    box-shadow: 0 3px 10px rgba(79,110,247,.32);
+    -webkit-tap-highlight-color: transparent;
+    transition: transform .15s, box-shadow .15s, background .25s;
+    font-family: inherit; flex-shrink: 0;
+    line-height: 1;
+  }
+  .speak-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(79,110,247,.42); }
+  .speak-btn:active { transform: scale(0.94); }
+  .speak-btn.playing { background: linear-gradient(135deg, #158a56, #2ec27e); animation: pulse 1s infinite; }
+  .speak-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(46,194,126,.55); }
+    50%     { box-shadow: 0 0 0 8px rgba(46,194,126,0); }
+  }
+  @media (max-width: 600px) {
+    .speak-btn { width: 28px; height: 28px; font-size: 13px; }
+  }
+  .card ul { list-style: none; margin-top: 12px; }
+  .card ul li {
+    padding-left: 20px; position: relative;
+    font-size: 14.5px; margin-top: 6px; color: #3c4152;
+  }
+  .card ul li::before {
+    content: ""; position: absolute; left: 2px; top: 9px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--primary); opacity: .6;
+  }
+  .card.green ul li::before { background: #22b573; }
+  .card.yellow ul li::before { background: var(--accent); }
+  .card.pink ul li::before { background: #ef476f; }
+  .card.purple ul li::before { background: #9d4edd; }
+
+  /* ===== 参数提示 ===== */
+  .param-note {
+    margin-top: 14px;
+    background: #eef2ff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: var(--primary-dark);
+  }
+  .param-note + .param-note { margin-top: 10px; }
+  .param-note b { font-family: Consolas, monospace; }
+  .param-note.warn { background: #fff7e6; color: #8a5a00; }
+
+  /* ===== 代码块 ===== */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: 12px;
+    padding: 16px 18px;
+    overflow-x: auto;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: 12px;
+  }
+  pre .kw { color: #c792ea; }
+  pre .fn { color: #82aaff; }
+  pre .str { color: #c3e88d; }
+  pre .num { color: #f78c6c; }
+  pre .cm { color: #676e95; }
+
+  /* ===== 程序参考 ===== */
+  .project {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 22px;
+  }
+  .project h3 {
+    font-size: 18px; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .project h3 .tag {
+    font-size: 12px; font-weight: 600;
+    background: #fff3d6; color: #9a6b00;
+    padding: 2px 10px; border-radius: 999px;
+  }
+  .project .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .step {
+    display: flex; align-items: flex-start; gap: 8px;
+    background: #f6f7fb; border-radius: 10px;
+    padding: 8px 12px; font-size: 14px;
+  }
+  .step .n {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--primary); color: #fff;
+    font-size: 12px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* ===== 运行效果（海龟画布） ===== */
+  .preview {
+    margin-top: 14px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e5e8f2;
+    background: #fff;
+  }
+  .pv-bar {
+    display: flex; align-items: center; gap: 6px;
+    background: #2a2a3e; padding: 8px 12px;
+  }
+  .pv-bar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .pv-bar .r { background: #ff5f57; }
+  .pv-bar .y { background: #febc2e; }
+  .pv-bar .g { background: #28c840; }
+  .pv-bar span { font-size: 12px; color: #9aa0c0; margin-left: 6px; }
+  .pv-bar .run-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.28);
+    color: #fff; font-family: inherit; font-size: 12px; font-weight: 700;
+    border-radius: 999px; padding: 3px 12px; cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s;
+  }
+  .pv-bar .run-btn:hover { background: rgba(255,255,255,.26); }
+  .pv-bar .run-btn:active { transform: scale(.96); }
+
+  .pv-canvas {
+    padding: 26px 16px 20px;
+    background:
+      linear-gradient(#fbfcff, #fbfcff);
+  }
+  .track {
+    display: flex; align-items: center;
+    height: 44px;
+    border-left: 2px dashed #d8def5;
+  }
+  .seg {
+    height: 20px; width: 0;
+    flex: 0 0 auto;
+    border-radius: 3px;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.10);
+  }
+  .seg.thin { border-radius: 0; box-shadow: none; }
+  .seg-legend {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 16px; padding-top: 12px;
+    border-top: 1px dashed #e5e8f2;
+  }
+  .chip {
+    display: flex; align-items: center; gap: 6px;
+    background: #f6f7fb; border-radius: 999px;
+    padding: 4px 12px; font-size: 12.5px; color: #4b5165;
+  }
+  .chip i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+  .chip b { font-family: Consolas, monospace; color: #3c4152; }
+
+  /* 颜色参考 */
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .sw {
+    display: flex; align-items: center; gap: 7px;
+    border: 1px solid #e5e8f2; border-radius: 999px;
+    padding: 4px 12px 4px 5px; font-size: 12.5px;
+    font-family: Consolas, monospace; background: #fff;
+  }
+  .sw i { width: 18px; height: 18px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.08); }
+
+  footer {
+    text-align: center; margin-top: 44px;
+    font-size: 13px; color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 34px 16px 60px; }
+    .hero .dots span { width: 52px; height: 52px; }
+    pre { font-size: 13px; padding: 14px; }
+    .pv-canvas { padding: 22px 12px 16px; }
+  }
+
+  /* ===== 右上角 下载PDF 按钮 ===== */
+  .pdf-btn {
+    position: fixed; top: 16px; right: 16px; z-index: 999;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: #fff; color: var(--primary-dark);
+    border: 1px solid #dfe4ff; border-radius: 999px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700;
+    font-family: inherit;
+    box-shadow: 0 4px 16px rgba(79, 110, 247, .22);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .pdf-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 110, 247, .32); }
+  .pdf-btn:active { transform: translateY(0); }
+  .pdf-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ===== 提示气泡 ===== */
+  .toast {
+    position: fixed; left: 50%; bottom: 26px; z-index: 1000;
+    transform: translateX(-50%) translateY(14px);
+    background: rgba(43, 47, 58, .95); color: #fff;
+    font-size: 13.5px; line-height: 1.6; text-align: center;
+    padding: 10px 16px; border-radius: 12px; max-width: 88vw;
+    opacity: 0; pointer-events: none;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, .2);
+    transition: opacity .25s, transform .25s;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .pdf-btn { top: 10px; right: 10px; padding: 8px 13px; font-size: 13px; }
+  }
+
+  /* ===== 打印 / 导出 PDF 优化 ===== */
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { background: #fff !important; }
+    body { padding-bottom: 0; }
+    .pdf-btn, .toast, .speak-btn, .run-btn { display: none !important; }
+    .hero { padding: 26px 12px 46px !important; }
+    .hero .dots span { border-color: #fff !important; }
+    .container { max-width: 100%; padding: 18px 0 0; }
+    .card, .project, pre, .preview, .param-note, .step, .goal {
+      break-inside: avoid; page-break-inside: avoid;
+      box-shadow: none !important;
+    }
+    .card, .project, .goal { border: 1px solid #e5e8f2; }
+    .section-title { break-after: avoid; page-break-after: avoid; margin: 22px 0 12px; }
+    .card:hover { transform: none; }
+    .cards { gap: 12px; }
+    .seg { transition: none !important; }
+  }
+
+  /* ---- 课次翻页导航 ---- */
+  .lesson-nav{display:flex;justify-content:space-between;align-items:center;gap:9px;
+    margin:26px 0 16px;padding-top:18px;border-top:1px dashed #d8def0}
+  .lesson-nav a{flex:1;text-align:center;background:#fff;border:1px solid #e2e8f8;
+    border-radius:10px;padding:11px 6px;font-size:13px;color:#4f6ef7;
+    text-decoration:none;font-weight:600;line-height:1.3}
+  .lesson-nav a:active{transform:scale(.97)}
+  .lesson-nav a.dis{color:#b6bfd4;background:#f7f9ff;border-color:#eef1f8;pointer-events:none}
+  @media (max-width:420px){ .lesson-nav a{font-size:12px;padding:10px 4px} }
+  @media print{ .lesson-nav{display:none} }
+</style>
+</head>
+<body data-page-node-id="Xkh31WPUj4QKWu5igFCbgI">
+
+<a class="back-btn" href="../" style="position:fixed;top:16px;left:16px;z-index:999;display:inline-flex;align-items:center;gap:6px;background:#fff;color:#3b55d9;border:1px solid #dfe4ff;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:700;font-family:inherit;text-decoration:none;box-shadow:0 4px 16px rgba(79,110,247,.22)">← 目录</a>
+
+<!-- 右上角：下载/打印为 PDF -->
+<button class="pdf-btn" id="pdfBtn" type="button" title="保存为 PDF" data-page-node-id="PL5n5koiQZim36JEZ3FjmA">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="hvcwmGzZyp22X9yxwr7YhN">
+    <path d="M12 3v12" data-page-node-id="pdBNSnFe5to8vpIWD0NrZw"/><path d="M7 10l5 5 5-5" data-page-node-id="vsm1iKPBFBgKR4HyF9YnAe"/><path d="M4 21h16" data-page-node-id="XxZSoWVcpL408lHjjEOEiS"/>
+  </svg>
+  下载 PDF
+</button>
+<div class="toast" id="toast" data-page-node-id="NtzFrKitdT4CLfRziIAFce"></div>
+
+<div class="hero" data-page-node-id="AjWRXregoMEHhcNqkXIC8W">
+  <div class="lesson-tag" data-page-node-id="OW9h2BDfeWtV4xvEmLhbJx">VR空间 · 第2课</div>
+  <h1 data-page-node-id="IiCVIZYqUgYl17ZqpqcVwy">海龟绘图知识点复习</h1>
+  <p class="sub" data-page-node-id="M7RDbVayH7lRlikmFooGwr">turtle 海龟库 · forward 前进 · pensize 粗细 · pencolor 颜色</p>
+  <div class="dots" data-page-node-id="DZVYRbdeRQZfCy8Bt4zmHC"><span class="d1" data-page-node-id="8Y3xlejxmlwcMdVMsXTUOr"></span><span class="d2" data-page-node-id="a4OG5ilc0kE9D1qft4GBdZ"></span><span class="d3" data-page-node-id="P6v4lB0kJAPO0ZjhQgkyED"></span></div>
+</div>
+
+<div class="container" data-page-node-id="zydt2QDST6xzhQMTMLZOb9">
+
+  <!-- 本课目标 -->
+  <div class="goals" data-page-node-id="KLdBt5aGDP7LBMUbErGwsF">
+    <div class="goal" data-page-node-id="U2RPWxoSeIb9limOdWMX1z"><span class="g-n" data-page-node-id="cxaF63dpRWB6DEWVERak6E">01</span><span data-page-node-id="rh2XCEbFQGIz3gBLu7AEDS">认识 <b data-page-node-id="KHOXuCHSRA6kUx3VUPeteK">turtle 库</b>，掌握海龟三件套</span></div>
+    <div class="goal" data-page-node-id="t3pegBaauRRxXnLKFdrIV6"><span class="g-n" data-page-node-id="94GDKoFKXBu1QWC0CDCjEG">02</span><span data-page-node-id="PNYhRl48Rrm110KRlSoQkt">掌握海龟画笔的<b data-page-node-id="S6DZBfAlEtfzkVehLP8tHV">常用方法</b></span></div>
+    <div class="goal" data-page-node-id="TLC4VrjcNTBbaq2Qd5kWQ8"><span class="g-n" data-page-node-id="nE5hKAfX5u0cL1jXDSvktE">03</span><span data-page-node-id="aoosEYEFCd1FH7igrrpxla">学习程序的<b data-page-node-id="gMPyuveQzHR3G5Fd8iirZt">顺序结构</b></span></div>
+  </div>
+
+  <!-- 一、核心知识点 -->
+  <div class="section-title" data-page-node-id="x3FL68An3iiUWA73j55e80"><span class="num" data-page-node-id="jYz6XxlA06iauXg7tlrgq7">1</span>核心知识点</div>
+  <div class="cards" data-page-node-id="kERQHMkmVHgSBTXKuP7j69">
+
+    <div class="card" data-page-node-id="pPJaCr4wu2SeSdBEM3RzAy">
+      <div class="word" data-page-node-id="7r8uz5vxZ3moT8EAgStAAH"><span class="en" data-page-node-id="TEoQZ6DE2O7WEwkAJHDPnD">import turtle</span><span class="ipa" data-page-node-id="DoVO9TBQwxvLf7pQUbJk5y">[ˈtɜːrtl]</span><span class="cn" data-page-node-id="pZv9BRDVG8mIANGUNh6kH7">海龟</span><button type="button" class="speak-btn" data-en="turtle" aria-label="朗读 turtle" data-page-node-id="3dOQuh0ony6bdEC45gNqMT">🔊</button></div>
+      <ul data-page-node-id="M1hoZX30qiElFuq19guDm3">
+        <li data-page-node-id="X6vNmH9Bz1E6NFJcbolAXH">用海龟画图的<strong data-page-node-id="j3lJ24TArMmOwm4S6wAjOA">第一步</strong>：导入 turtle 库</li>
+        <li data-page-node-id="sVUsWZjWkMnP0HXM2cwrAO">turtle 是 Python <strong data-page-node-id="JSHrFLaLwmf0flIlwZ06Yk">自带的绘图库</strong>，不用额外安装</li>
+        <li data-page-node-id="3cDUk2LjseKE2RBZfq2IJg">导入后就可以用 <strong data-page-node-id="YIshCiGzet6AIuEut7sLG1">turtle.forward()</strong> 这样的函数</li>
+        <li data-page-node-id="aavoZw89P8e4tOh4hy16bf">也可以写 <strong data-page-node-id="IrchsdFq3KWXBFcRHcaraj">import turtle as t</strong>，之后用 <strong data-page-node-id="40OJa9A6pNKBAHBnPmn286">t.forward()</strong> 更省事</li>
+      </ul>
+      <pre data-page-node-id="BbFHdLGJo0E5Cebm5kSn1s"><span class="kw" data-page-node-id="EcNt9SfGhYonVqffPMvhbO">import</span> turtle              <span class="cm" data-page-node-id="icTH7HooZy722CkzLhURwg"># 导入海龟库</span>
+turtle.<span class="fn" data-page-node-id="GnKEY57Fk7kZY0vDeJabd7">forward</span>(<span class="num" data-page-node-id="d9GJjJVwNNtwzQ0BD3OpzP">100</span>)        <span class="cm" data-page-node-id="uLbLTg5eG2nGWGnKkGLmOf"># 前进 100</span>
+turtle.<span class="fn" data-page-node-id="LeK4frAcpSGfmHPiLxGBjX">done</span>()               <span class="cm" data-page-node-id="v2ocBLskLP4y1GhHz5pC72"># 绘图结束</span></pre>
+    </div>
+
+    <div class="card green" data-page-node-id="aLrwIhiQLy8sIl79ZHz7P4">
+      <div class="word" data-page-node-id="P2D2cWnDNwv8buinzM9wiA"><span class="en" data-page-node-id="B6M2jDv83dNB9kZT49Luj7">forward()</span><span class="ipa" data-page-node-id="YxCyjp7ZsM0snPJZRWynaX">[ˈfɔːrwərd]</span><span class="cn" data-page-node-id="glIDBEQNUGGCLC7kFHykjy">前进</span><button type="button" class="speak-btn" data-en="forward" aria-label="朗读 forward" data-page-node-id="f2QUiZmRH0I3MXWVYtVQS1">🔊</button></div>
+      <ul data-page-node-id="rqQDaQY4UGidBJDGDChG6d">
+        <li data-page-node-id="I1GIH6VEZC1JNVUUh7qacS">让画笔<strong data-page-node-id="ur8BAYFB1INNiTXn9ERnJw">向前移动</strong>指定的距离，边走边画线</li>
+        <li data-page-node-id="EdpvR4ut2ZdU8PuF9gSTkX">括号里写<strong data-page-node-id="8gh6B39rcZVij55Su1GdS3">距离（数字）</strong>，比如 50</li>
+        <li data-page-node-id="FcgLlPQa8EMdEkNWBHDXdI">海龟一开始头朝<strong data-page-node-id="kvHikbQ3wanfavxY4GFaUj">右边</strong>，前进就是往右画一条线</li>
+        <li data-page-node-id="nBQZMuKDIDXbYPAopKG3RT">想画更长的线，就把数字写大一点</li>
+      </ul>
+      <pre data-page-node-id="UIPI4TpFeiAFfBVgQvMnnD"><span class="kw" data-page-node-id="PucwoVXUKEAuleKcQUuzHG">import</span> turtle
+turtle.<span class="fn" data-page-node-id="ywtmbjf4qj2SBWaL31BBqt">forward</span>(<span class="num" data-page-node-id="L4BBHejUBnRu4KDFrxQvBF">50</span>)         <span class="cm" data-page-node-id="LfHWijlaJryyW7Vj8LTUHG"># 前进 50</span>
+turtle.<span class="fn" data-page-node-id="HpAH6T4yBUhGmWB8VpQ3jH">done</span>()</pre>
+    </div>
+
+    <div class="card yellow" data-page-node-id="J9z0Y5HSA8apwLfz3IkbWc">
+      <div class="word" data-page-node-id="bCsmSvy7AivbNlb4xS3BTX"><span class="en" data-page-node-id="FWWko2eV1lm3P3qMnE4dvr">pensize()</span><span class="ipa" data-page-node-id="Aws6vYA9GGlu7VvhmTRyJd">[saɪz]</span><span class="cn" data-page-node-id="3ItwiFZEq5BijfyuKeAQsc">大小</span><button type="button" class="speak-btn" data-en="size" aria-label="朗读 size" data-page-node-id="EfCvtFfFzsK1OoxDbDKMuw">🔊</button></div>
+      <ul data-page-node-id="pihCLHBMAgiAaL7AD2mWsm">
+        <li data-page-node-id="rJOO6R4cAK6ZVQCu9UeGM7">设置画笔的<strong data-page-node-id="67n9NSF8jn7G8HlqSV3L7J">粗细</strong></li>
+        <li data-page-node-id="tdQqSGLxqCdgCTUncEMBo0">括号里写<strong data-page-node-id="eoxfD2pj9LVlvfAV13lDDd">数字</strong>，数字越大线越粗</li>
+        <li data-page-node-id="434v1tj28IcxLOjsCHJ8Qs">默认粗细是 <strong data-page-node-id="d3LnYsfVMLYTlNpTPs1FuS">1</strong>，可以一直用到下一次修改</li>
+        <li data-page-node-id="mtBAEIsZoRYCBuw1YbdrL3">要写在 <strong data-page-node-id="taDByR6q5BdkLZHrCFT8vx">forward() 前面</strong>才有效果</li>
+      </ul>
+      <pre data-page-node-id="ALRJiPH7abML7EbCC1Sb4R"><span class="kw" data-page-node-id="gxltR1ShKp3HMm0ERG4BhW">import</span> turtle
+turtle.<span class="fn" data-page-node-id="hZPb3EmixJLLapg2y9Ds9j">pensize</span>(<span class="num" data-page-node-id="a5jwuuppxbJxGcc2q6YkBK">12</span>)         <span class="cm" data-page-node-id="CsizvtU0diO7uKlKZjGFZU"># 画笔粗细 12</span>
+turtle.<span class="fn" data-page-node-id="b0xmiL3YtIEDOWK8Am259t">forward</span>(<span class="num" data-page-node-id="D1JApM46w2xS0mdLq0tvbm">50</span>)
+turtle.<span class="fn" data-page-node-id="aXVrjZQA0C13rI8oBxVgDG">done</span>()</pre>
+    </div>
+
+    <div class="card pink" data-page-node-id="XAkuFifcg9MtEQnwGhawB9">
+      <div class="word" data-page-node-id="dAsxz6hkMBR7qWKaO8FxNo"><span class="en" data-page-node-id="8j7DmyT5G5uGX6ygOo7yQU">pencolor()</span><span class="ipa" data-page-node-id="bGX3HEVG4EYdEvGmZ50XAn">[ˈkʌlər]</span><span class="cn" data-page-node-id="aA2PGCAQQREcCUfAZLtXfZ">颜色</span><button type="button" class="speak-btn" data-en="color" aria-label="朗读 color" data-page-node-id="aJkPIBDcQcAZAWxhmZl5Ka">🔊</button></div>
+      <ul data-page-node-id="oVk3vSV5nWlr7mt1uCMpLT">
+        <li data-page-node-id="gHnuDZyVCBa5XhM4HDHBqN">设置画笔的<strong data-page-node-id="ksMghLFoaQqzB6BezahJkG">颜色</strong></li>
+        <li data-page-node-id="8EhWEFFSnXcLa1rCmoXiMX">括号里写<strong data-page-node-id="nOKN2yzMQHVpV63l4zaUxZ">带引号的英文颜色名</strong>，比如 <strong data-page-node-id="DUqZl4jHEG6QZlEG3lLi4f">"red"</strong></li>
+        <li data-page-node-id="xEHt6jpHw9FBF1YFQQF0IC">常用颜色：red / gold / blue / green / pink / silver</li>
+        <li data-page-node-id="DneKCKNLzDGvRdHDnCk8f7">同样要写在 <strong data-page-node-id="Cg5XbHglp38qUnOwLz0RbL">forward() 前面</strong>才有效果</li>
+      </ul>
+      <pre data-page-node-id="9HeMajsQle2pT681QGBN3x"><span class="kw" data-page-node-id="IUK5iKsLKR7QyRMtlDyq7P">import</span> turtle
+turtle.<span class="fn" data-page-node-id="8WRJVkfDFrP4pCiUa3dKHB">pencolor</span>(<span class="str" data-page-node-id="nLs4qjOBxpgJNkjDCCQ8y3">"red"</span>)    <span class="cm" data-page-node-id="tptbt1EGd0sDsBwhEeMv1g"># 画笔变红色</span>
+turtle.<span class="fn" data-page-node-id="x7G6bLRtNFNYuDLzFlJE1C">forward</span>(<span class="num" data-page-node-id="K6Y1UaD6eMqNYLUic8Y3HI">50</span>)
+turtle.<span class="fn" data-page-node-id="2Ry7pkSJ8KvGJUQ4nOw5B1">done</span>()</pre>
+    </div>
+
+    <div class="card purple" data-page-node-id="igv60RF1kcXs39DVUIEl2r">
+      <div class="word" data-page-node-id="FtWwv6Lwb7gSaymsH0MH8g"><span class="en" data-page-node-id="CcZ1vBhUOwbEZTB9Begiir">hideturtle()</span><span class="ipa" data-page-node-id="5XRb1wKq2ft8dAds2u0O4x">[haɪd]</span><span class="cn" data-page-node-id="ySZIbUPK4wqnbIGt3WaXpK">隐藏</span><button type="button" class="speak-btn" data-en="hide" aria-label="朗读 hide" data-page-node-id="SBUshdpwzzJGGDDD5KeFs5">🔊</button></div>
+      <ul data-page-node-id="kQ1U0nzO1ZRmzdlFJxWBxq">
+        <li data-page-node-id="A3PKKpkQ5mimgFOHnwppdP">把画笔（小海龟箭头）<strong data-page-node-id="GpvQDPSncuYpn9Zj8iHAHe">隐藏</strong>起来</li>
+        <li data-page-node-id="gTQ7bqHcCwH3AWde2c4G2O">画完图再用，画面会更<strong data-page-node-id="CYGz6IE9I9EkZFTCReQTj1">干净好看</strong></li>
+        <li data-page-node-id="6BVdO5stAireCC6Q1WnEll">一般放在<strong data-page-node-id="BmU6i3WE5VhkG8VWiLHNqg">画图之后、done() 之前</strong></li>
+        <li data-page-node-id="vZAVsEcPJuCQ412ihEiZkE">想重新显示，用 <strong data-page-node-id="YPfFUX3CZOCjlanm02WoQJ">showturtle()</strong></li>
+      </ul>
+      <pre data-page-node-id="pxFnlBLkpgwg8o93l6oYuz">turtle.<span class="fn" data-page-node-id="YrDu5UJtPrn21qFX7sXAMF">hideturtle</span>()         <span class="cm" data-page-node-id="q7TQR5eBtoAJu4BhDBJJLJ"># 隐藏画笔</span>
+turtle.<span class="fn" data-page-node-id="9yX25EpDj9cLBDmE0hxYo4">done</span>()</pre>
+    </div>
+
+    <div class="card" data-page-node-id="WhDQu838S0KJSmSOceHwBc">
+      <div class="word" data-page-node-id="bRcPou5husSWAI9hWAbK3i"><span class="en" data-page-node-id="9CKMuTZJUmDnYBBCUHzYZR">done()</span><span class="ipa" data-page-node-id="gZ2W60aB9R8CNAmduJ7bg1">[dʌn]</span><span class="cn" data-page-node-id="7mBi3rWIWx6aGy6NeEKwle">完成</span><button type="button" class="speak-btn" data-en="done" aria-label="朗读 done" data-page-node-id="nhRw3XeA3ALCkipWDJF39R">🔊</button></div>
+      <ul data-page-node-id="ziP1zxgCCSezHyKGaigu5G">
+        <li data-page-node-id="ItyunUHTMRKTGFzDBvUAzG">写在程序的<strong data-page-node-id="6suj6sQFSgyrnSfsbXQDYe">最后一行</strong></li>
+        <li data-page-node-id="iJsYvMw5f73cSkHXMvIASt">作用是<strong data-page-node-id="kbd1cC5gJRuPfoV7qUzOYN">固定海龟窗体</strong>，告诉程序绘图结束</li>
+        <li data-page-node-id="2m7ibBPL12sgfezaunDdbG">不加的话，窗口可能<strong data-page-node-id="rxGHVkiwEFxhZ87jCAsx3r">一闪就关掉</strong>，看不到画</li>
+        <li data-page-node-id="JfPg3acVjlqlYtkIsiIzOZ">它是海龟三件套的最后一件</li>
+      </ul>
+      <pre data-page-node-id="MpfwDja4FjPQTVTACvDHAi">turtle.<span class="fn" data-page-node-id="YB15I0lPJbUQvkzT16TBTB">done</span>()               <span class="cm" data-page-node-id="LZS258HZbg4Pmw7ulOP1da"># 绘图结束，窗口保持</span></pre>
+    </div>
+
+  </div>
+
+  <div class="param-note" data-page-node-id="eQZeKJCGUhZtzX2POkL6Be">
+    💡 <strong data-page-node-id="CYqDCSD8f4fgE8Rh4kHBc1">海龟三件套</strong>：<b data-page-node-id="Z2ShJJNorKNCSyQxYlPC4G">import turtle</b>（导入库）→ <b data-page-node-id="SqUefv6B1XDMuzcLmhM8F2">turtle.forward(距离)</b>（画一笔）→ <b data-page-node-id="KVtQBKQnV3JJNu3S60koiy">turtle.done()</b>（收工）。
+    每一个海龟程序都离不开这三行。
+  </div>
+  <div class="param-note warn" data-page-node-id="ul655dgpgb5qf9TI6Po8G9">
+    💡 <strong data-page-node-id="T1cMMosYKQosJvUFRcUi4J">顺序结构</strong>：程序<strong data-page-node-id="tmnAra7OdatyTrjeaac8CP">从上往下一行一行</strong>执行，谁写在前面谁先执行。
+    所以想换颜色、改粗细，一定要把 <b data-page-node-id="yLkxwQWguRdeuWkEVO321x">pencolor()</b> / <b data-page-node-id="aHkAqO1lQFI8NCUEwCJl0L">pensize()</b> 写在 <b data-page-node-id="CmAORnvMnLGKUzMoaYvR6j">forward()</b> 前面，否则这一笔还是用旧的设置画出来的。
+  </div>
+  <div class="param-note warn" data-page-node-id="KNjhGtSIXvLX8qjfisORQp">
+    💡 <strong data-page-node-id="HxSCLfJY9ppISJEj4r83pT">引号规则</strong>：<b data-page-node-id="2AvvKRK3CHLKqf56PdEJWy">pencolor("red")</b> 里的颜色名是文字，要用<strong data-page-node-id="z6UmS53Iwm79iSPMz9Tk6r">英文引号</strong>包起来；
+    <b data-page-node-id="uGXDNh04QMq5xPSumKKUQs">pensize(20)</b>、<b data-page-node-id="zbDqK1jIX7n81vxLCGCeHK">forward(50)</b> 里是数字，<strong data-page-node-id="Fu0rGlduWAKbJDdbA2Ayt5">不能</strong>加引号。
+  </div>
+
+  <!-- 二、常用英文单词 -->
+  <div class="section-title" data-page-node-id="qsh5Gx4SgMSazArREi8vFN"><span class="num" data-page-node-id="Hrhm5HsMQpda5YZvQ4padD">2</span>本课英文单词表</div>
+  <div class="cards" data-page-node-id="ktdXrdXYfgzgfsPMGmu5Na">
+    <div class="card" data-page-node-id="34IlVuyjGrVd8L6DNTNO47">
+      <div class="word" data-page-node-id="tZTD9Py2WnaBYCdawQPSK1"><span class="en" data-page-node-id="05Df07eqX2I8NN66cfqZiC">turtle</span><span class="ipa" data-page-node-id="NrbBYr1H9bJoqkLm0qTdIn">[ˈtɜːrtl]</span><span class="cn" data-page-node-id="U0uWvo5C0yEwB6WDhh3LjF">海龟</span><button type="button" class="speak-btn" data-en="turtle" aria-label="朗读 turtle" data-page-node-id="z5mWdZ53dQCDJpq2b9umuO">🔊</button></div>
+    </div>
+    <div class="card green" data-page-node-id="WsGIJeXgCEU2GqY5NnOGHA">
+      <div class="word" data-page-node-id="CnYaK7zDE7ECEKzkG6x7dy"><span class="en" data-page-node-id="ngOBWzd5qCKHKfGUY0opHS">forward</span><span class="ipa" data-page-node-id="nvoSe3rnSPXQFhOH15zKEg">[ˈfɔːrwərd]</span><span class="cn" data-page-node-id="PCBVuGO9uEVqoaiV9BMgL7">前进</span><button type="button" class="speak-btn" data-en="forward" aria-label="朗读 forward" data-page-node-id="VnRq40hW3nIhKUjgRhXFM6">🔊</button></div>
+    </div>
+    <div class="card yellow" data-page-node-id="xwIkcqTaYomZ11iu6wuqmd">
+      <div class="word" data-page-node-id="J8oLdiGJqTNZhMbfL2DzQj"><span class="en" data-page-node-id="NfEKJazCKSho9nqzCizEkh">size</span><span class="ipa" data-page-node-id="A3BHElpk416gxmuetBgqdo">[saɪz]</span><span class="cn" data-page-node-id="MRZ1TVgLcCnGH7bzZAFFtF">大小</span><button type="button" class="speak-btn" data-en="size" aria-label="朗读 size" data-page-node-id="hvA2DfHKVBmAF9DWgwDHFR">🔊</button></div>
+    </div>
+    <div class="card pink" data-page-node-id="BijgnzefErCklosVpQHqNA">
+      <div class="word" data-page-node-id="8sAGn0dtnVpgMOGCxfZgQC"><span class="en" data-page-node-id="yjvTDUKCUlKpWRToGtQ6FD">color</span><span class="ipa" data-page-node-id="PRVJH5OlMpWoB9zzJOyNhH">[ˈkʌlər]</span><span class="cn" data-page-node-id="eWe8z1EwpFbeNfgFzL4dJl">颜色</span><button type="button" class="speak-btn" data-en="color" aria-label="朗读 color" data-page-node-id="7lqQ8HSfM2Pi2kQtQbceot">🔊</button></div>
+    </div>
+    <div class="card purple" data-page-node-id="Aow7tbIAWmhbol7NWTRH2t">
+      <div class="word" data-page-node-id="SlPm02rtpY5oxctvR00rr6"><span class="en" data-page-node-id="tJMPpDvCn80lgepd7QEWSB">hide</span><span class="ipa" data-page-node-id="e3JyO8W6EUkGB5o64upOvK">[haɪd]</span><span class="cn" data-page-node-id="ww8TjXbdp580YJSOBuadnQ">隐藏</span><button type="button" class="speak-btn" data-en="hide" aria-label="朗读 hide" data-page-node-id="GUYBzbdbP4PJCCTJ4lrwlz">🔊</button></div>
+    </div>
+    <div class="card" data-page-node-id="7EnK1ST4nDIOCctq0Xe245">
+      <div class="word" data-page-node-id="Bbg4C1ZiV7NIAWIyYoz0Df"><span class="en" data-page-node-id="nQsDIk57GnFNghDSAO3CGF">done</span><span class="ipa" data-page-node-id="TinLGRQp7pSIbMud5PovVh">[dʌn]</span><span class="cn" data-page-node-id="aVPntdAH5QjvvN8FDwajR7">完成</span><button type="button" class="speak-btn" data-en="done" aria-label="朗读 done" data-page-node-id="jCHFCuzDqSP5R7IpbOEaL4">🔊</button></div>
+    </div>
+    <div class="card green" data-page-node-id="YJNjUzKwJtsauFYIDiy8A4">
+      <div class="word" data-page-node-id="cfV7xgbbC5lqFHof4mx9ex"><span class="en" data-page-node-id="ZFTV9ujjoQ1SkSdoJSS6rV">pen</span><span class="ipa" data-page-node-id="No0agW0eNSp7qEINHdcd2H">[pen]</span><span class="cn" data-page-node-id="uTHr6BL1GBXB8cCCrB8Ode">画笔</span><button type="button" class="speak-btn" data-en="pen" aria-label="朗读 pen" data-page-node-id="mAK2IdpMIH66E6kExBNelA">🔊</button></div>
+    </div>
+    <div class="card yellow" data-page-node-id="EGFNVyxGDaO0aWozmXsXKf">
+      <div class="word" data-page-node-id="yXoCjbEADbPsIJtAYoDoXr"><span class="en" data-page-node-id="9slFwR1wlKgYH94mXt07Ww">import</span><span class="ipa" data-page-node-id="wySH3Cl8RqGoZawLAmjrVG">[ɪmpɔːt]</span><span class="cn" data-page-node-id="vs6YEZCuTpOfn9dEe6U1Cx">导入</span><button type="button" class="speak-btn" data-en="import" aria-label="朗读 import" data-page-node-id="UtB8RQqvPnwMCYLDhTcfSF">🔊</button></div>
+    </div>
+  </div>
+
+  <!-- 三、程序参考 -->
+  <div class="section-title" data-page-node-id="1gpvKVfcKcnPDeWOVjXC2z"><span class="num" data-page-node-id="jQOWpYzkj9FRjm3UiZvoBv">3</span>程序参考 · VR 武器铺</div>
+
+  <!-- 挑战1 -->
+  <div class="project" data-page-node-id="1orqhEwGHATOj99AnsXbPi">
+    <h3 data-page-node-id="IRMtxRFI36dwUqrQmNFxPD">🥢 绘制金箍棒<span class="tag" data-page-node-id="pQYE0PspQbinxjLYicj9xc">挑战1 · pensize + pencolor</span></h3>
+    <div class="steps" data-page-node-id="MWbVQ4qb10tx5SJSL1Fz7E">
+      <div class="step" data-page-node-id="ULifhY4vQBjerFnB38uHPX"><span class="n" data-page-node-id="MRj8OzgTVlLQDJ1NIwtwkM">1</span>第一步：设置画笔粗细为 20</div>
+      <div class="step" data-page-node-id="UZTs7inPKqPfjkpLWYUy2E"><span class="n" data-page-node-id="mE5m525CVpKyrABxhxAKWO">2</span>第二步：金色，前进 40</div>
+      <div class="step" data-page-node-id="AX0BCwtRoxoC5WZfC8WyrF"><span class="n" data-page-node-id="oVDU0GhM7IwlFGs56mU0Jr">3</span>第三步：红色，前进 120</div>
+      <div class="step" data-page-node-id="K0DX7DIcwHEbvM5LDAD4ru"><span class="n" data-page-node-id="eKBWCTCTM9nDCLjmDo8gA6">4</span>第四步：金色，前进 40，隐藏画笔</div>
+    </div>
+    <pre data-page-node-id="eJEowzk8viE3r73pryO8D8"><span class="kw" data-page-node-id="ICqGCU9DzMGV6SCP4zBKRe">import</span> turtle
+turtle.<span class="fn" data-page-node-id="OUpldWj7qnD1yfQAeZOcUg">pensize</span>(<span class="num" data-page-node-id="7GrDJrw0aMD7mxbBCID9Fh">20</span>)                  <span class="cm" data-page-node-id="uXVHyHvDj0CglwlY7xEeOl"># 画笔粗细 20</span>
+turtle.<span class="fn" data-page-node-id="r5m1DQrteNDzxp489zvtJA">pencolor</span>(<span class="str" data-page-node-id="tn3UvfhRqOQJ0F56BTTnXI">"gold"</span>)           <span class="cm" data-page-node-id="lMTYTAkDEw3AmEidiymi67"># 金色</span>
+turtle.<span class="fn" data-page-node-id="0VpQmt9Mu3m4EwsBu6HOmn">forward</span>(<span class="num" data-page-node-id="IJIUZ32rFqEd4ofzwIaPzg">40</span>)                 <span class="cm" data-page-node-id="UnfY5Akq3a8wiydkNO42u2"># 金色部分 40</span>
+turtle.<span class="fn" data-page-node-id="yzOOaSoQORWmk28J6ZBqww">pencolor</span>(<span class="str" data-page-node-id="Ibw3Tks3A48tcKxSNTERwn">"red"</span>)            <span class="cm" data-page-node-id="Wqu1zzukDDf09pGm0Itz57"># 红色</span>
+turtle.<span class="fn" data-page-node-id="izPSR5d1B8TqBWs1N5OLCg">forward</span>(<span class="num" data-page-node-id="dquRnm8PAjfxHAT1vmonoC">120</span>)                <span class="cm" data-page-node-id="ml50kibUMBk6uDVufZrlpf"># 红色部分 120</span>
+turtle.<span class="fn" data-page-node-id="ZGz70g2ThM7BsAxIsmkEEb">pencolor</span>(<span class="str" data-page-node-id="tgHO9ZHBVNH6F8LV40KAeB">"gold"</span>)           <span class="cm" data-page-node-id="c2jdiNe6WwfGd2D7gDSvVt"># 再变回金色</span>
+turtle.<span class="fn" data-page-node-id="cS3rl90FRSbgbJn9RYD84V">forward</span>(<span class="num" data-page-node-id="u5cCIlIACzxivWGDAiZtTU">40</span>)                 <span class="cm" data-page-node-id="CZzPAHVBuMztkWKg0srIx8"># 金色部分 40</span>
+turtle.<span class="fn" data-page-node-id="4xefMMtzFQf9hzhn3EDya9">hideturtle</span>()                <span class="cm" data-page-node-id="ahn3VTvmlom98xBTeI6TlO"># 隐藏画笔</span>
+turtle.<span class="fn" data-page-node-id="WIuHiQCOYZfyz6DWRM80P5">done</span>()                     <span class="cm" data-page-node-id="L1hYbYemJzT1idaAcYUk1A"># 绘图结束</span></pre>
+    <div class="preview" data-page-node-id="yeMWWdN7bG2spaJZpHT8vn">
+      <div class="pv-bar" data-page-node-id="DRRkLRxq88CM2c76rpLDTG"><i class="r" data-page-node-id="sHDlnzpSN7dCTz5GHUW4RY"></i><i class="y" data-page-node-id="xHBidIkUu2QQUp3P6QNHNG"></i><i class="g" data-page-node-id="jnFLoqFBCTik5kOAXcOuJk"></i><span data-page-node-id="lApU5qByBdWtxAtC1HN6Fa">运行结果</span>
+        <button type="button" class="run-btn" data-page-node-id="bVJwsQSLvjPXDKP3bPiryd">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas" data-page-node-id="FjEZcAkYMW7FiCyyaRsdHy">
+        <div class="track" data-page-node-id="bcyfqFiRbHWfCvkGQRwdvX">
+          <div class="seg" data-len="40"  data-thick="20" style="background:#ffd700" data-page-node-id="cZadOmPO7FStFlOBAlFCbI"></div>
+          <div class="seg" data-len="120" data-thick="20" style="background:#e03131" data-page-node-id="waTT2xwAJGHxv0JCI48yI0"></div>
+          <div class="seg" data-len="40"  data-thick="20" style="background:#ffd700" data-page-node-id="sbwoY6BcJpKKohcS8OQ6dB"></div>
+        </div>
+        <div class="seg-legend" data-page-node-id="B50eC81i8qPm6RqFkgf05h">
+          <span class="chip" data-page-node-id="Y1Px33DvEwN8ZwkNwfy3kG"><i style="background:#ffd700" data-page-node-id="P3YVvP4NKFXDTJYTnymIFw"></i>gold 粗细 <b data-page-node-id="ZEfOrmo5GCkgcAelUapCBl">20</b> · 长度 <b data-page-node-id="M8UDvEWsHl6epa2f2ArCOC">40</b></span>
+          <span class="chip" data-page-node-id="RcMOuYdI1TL3dRsqaaoQE3"><i style="background:#e03131" data-page-node-id="Wr62nha9yKrZfXyzdFvhWV"></i>red 粗细 <b data-page-node-id="uR99oB2w3SZB8x3MLhFF3F">20</b> · 长度 <b data-page-node-id="DBCFkFfAw5bfkJOzGn0nQv">120</b></span>
+          <span class="chip" data-page-node-id="DOjIIanWVZ2e8mz7v7U57y"><i style="background:#ffd700" data-page-node-id="DC8gwZAJk0WYmXIQ8FxZ1L"></i>gold 粗细 <b data-page-node-id="u9cUqhbJJsylRBHV8jSBoB">20</b> · 长度 <b data-page-node-id="4HBwJKc0M0V93tMTirx0Go">40</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 挑战2 -->
+  <div class="project" data-page-node-id="X1hn97dn90RuRLMwLZpnAj">
+    <h3 data-page-node-id="XadCyStRRTeAiFxAY9RDYZ">⚔️ 绘制混天剑<span class="tag" data-page-node-id="Bk7uRGyuX8QmxeZ7g3Auj9">挑战2 · 多次改 pensize</span></h3>
+    <div class="steps" data-page-node-id="VAlElok6rx4LxwhJKUZVIF">
+      <div class="step" data-page-node-id="v3Gfi1i3fo27jJw5HHRdYT"><span class="n" data-page-node-id="CnZKppO4RMXCNR8aINlaKe">1</span>第一步：剑柄，粗细 12，前进 50</div>
+      <div class="step" data-page-node-id="Gz3AeyjIbCSlaxzieiN9Iz"><span class="n" data-page-node-id="t1ADcKZLLGzbfoDBQoyFA5">2</span>第二步：护手，粗细 30，前进 5</div>
+      <div class="step" data-page-node-id="hhMKQtIg8BmdHAhmxMZBrN"><span class="n" data-page-node-id="OXiFeRsXyz1XaROOnAE7ed">3</span>第三步：剑身，粗细 20，前进 200</div>
+    </div>
+    <pre data-page-node-id="hkGrVtBaVNYwnSpStwno6B"><span class="kw" data-page-node-id="CLFy3tXvqcqBYAlhB92GMb">import</span> turtle
+turtle.<span class="fn" data-page-node-id="NG1HXPbZ7EuY0BHQnN82lm">pensize</span>(<span class="num" data-page-node-id="taHYxegS01g5mPj3rdvtNp">12</span>)                  <span class="cm" data-page-node-id="i5dLx7jMC9RJnN7RVL9SXf"># 剑柄：细一点</span>
+turtle.<span class="fn" data-page-node-id="31yVcTmInmGBiGu8890Nhf">forward</span>(<span class="num" data-page-node-id="T4OuuhBpvBq3GD1vQuNVph">50</span>)                 <span class="cm" data-page-node-id="jDUHewpst3TpVYEhzdLA3g"># 剑柄 50</span>
+turtle.<span class="fn" data-page-node-id="yxTqFeYEzFc1YFrRn2Rnp2">pensize</span>(<span class="num" data-page-node-id="FTvNw1vWjQAbl2XKIsvUlw">30</span>)                  <span class="cm" data-page-node-id="PgHWN49qzCrM2C3SKYcDsQ"># 护手：最粗</span>
+turtle.<span class="fn" data-page-node-id="7pzL1MB19EZjRpOw2D6hJl">forward</span>(<span class="num" data-page-node-id="D6VmhyoXDxPzSM9BueACaf">5</span>)                  <span class="cm" data-page-node-id="2fcafGT6yTqFxIl7vEBZoV"># 护手 5（很短）</span>
+turtle.<span class="fn" data-page-node-id="7fzPzhLX1t2Ib4U4SoqqdI">pensize</span>(<span class="num" data-page-node-id="HKJNNuduY3VeM6R37ANOgt">20</span>)                  <span class="cm" data-page-node-id="N6G1ivph4BQwa599IpF0vK"># 剑身：中等</span>
+turtle.<span class="fn" data-page-node-id="PaWZGkJUYyxsMJXvlaJWHr">forward</span>(<span class="num" data-page-node-id="8MQGqBsBpJVBRO4DRre7oy">200</span>)                <span class="cm" data-page-node-id="Ix30DGTDKrNLvuCHxnnfZ3"># 剑身 200</span>
+turtle.<span class="fn" data-page-node-id="xhsF1vfs8SD16JnYCvkoz0">done</span>()</pre>
+    <div class="preview" data-page-node-id="qjcdeJTDNlS8KbRXEe7nCx">
+      <div class="pv-bar" data-page-node-id="BezDVBiARmea7KrAurPuGo"><i class="r" data-page-node-id="CKI84wlTUS4VwVPdUM88KW"></i><i class="y" data-page-node-id="ScrmfKskenl2GrL6EwHPgO"></i><i class="g" data-page-node-id="WteZfNFtp6zeKfpxC02aKI"></i><span data-page-node-id="4QxEf2Go0VN1QfSqPBnoOx">运行结果</span>
+        <button type="button" class="run-btn" data-page-node-id="WDcAxcr3WM32BOycZYg9iB">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas" data-page-node-id="xZ96VphMkNwOG5xq0AnaLG">
+        <div class="track" data-page-node-id="2mnov622FpFhKqwVERtEpf">
+          <div class="seg" data-len="50"  data-thick="12" style="background:#495057" data-page-node-id="hvu4dCZ2ETs5Xbeh8pkkkj"></div>
+          <div class="seg" data-len="5"   data-thick="30" style="background:#868e96" data-page-node-id="c7gMwFTEzjtBIITCiX109J"></div>
+          <div class="seg" data-len="200" data-thick="20" style="background:#adb5bd" data-page-node-id="LJBq0qXY25e9f00DfM2vVB"></div>
+        </div>
+        <div class="seg-legend" data-page-node-id="VIGeO3dW5ZDFkwNFeYdvCV">
+          <span class="chip" data-page-node-id="QTz6MmHXXGoBbRHjIBNEjK"><i style="background:#495057" data-page-node-id="rAIc3YFKVdRC6LXDxE33kD"></i>剑柄 粗细 <b data-page-node-id="C0Py1srfSX6kCrfJogY9V3">12</b> · 长度 <b data-page-node-id="9OOjs6rJnLB9w5DBuLVVhS">50</b></span>
+          <span class="chip" data-page-node-id="QnOZiWkDMRunLJGwtrtuN8"><i style="background:#868e96" data-page-node-id="CpMGkDWfSYLp7oS2UVVnxa"></i>护手 粗细 <b data-page-node-id="SVfNSF0VG8T0GDJc0bR0TF">30</b> · 长度 <b data-page-node-id="XHRlk4ENCJTybDF5Gp2Kvd">5</b></span>
+          <span class="chip" data-page-node-id="sm2L7gCWZy0zXGYs7LQ7sM"><i style="background:#adb5bd" data-page-node-id="P6XyKbdUBUshu0xQKiXIp1"></i>剑身 粗细 <b data-page-node-id="Z6GM6spJ6KREr1ziAZFh1P">20</b> · 长度 <b data-page-node-id="EI1h3d3TQznvqYBIVsCWhx">200</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 挑战3 -->
+  <div class="project" data-page-node-id="0nO2oLtTlMX5grow0zOAva">
+    <h3 data-page-node-id="AUHAuSaCBiv90wavG6KjEH">🔗 设计双节棍<span class="tag" data-page-node-id="32Rzt9ExZHwCKctZ6t9Fgx">挑战3 · 自由创作</span></h3>
+    <p style="font-size:14.5px;color:#3c4152;margin-top:8px;" data-page-node-id="snKZ2M5qzHQ88tZwb5EOkX">
+      给小美设计一款<strong data-page-node-id="U0Cp4pzrOLDVE5WMD5abpV">独一无二的武器</strong>——双节棍：两根棍子 + 中间一条细细的链子。
+    </p>
+    <div class="steps" data-page-node-id="1t99BF8jg4JZ5bDLri1kw4">
+      <div class="step" data-page-node-id="AE3BlllYHy62dEZHXDHozo"><span class="n" data-page-node-id="qNMnxL1YDyX4vGuuUP0cyQ">1</span>第一步：金色粗棍，前进 35</div>
+      <div class="step" data-page-node-id="MJD740nnXnDSFTkekOgsh9"><span class="n" data-page-node-id="7WVKAmgPBd05gMEx6FIJm2">2</span>第二步：银色粗棍，前进 35</div>
+      <div class="step" data-page-node-id="C927xXTsu0xIcZFp8Qp3my"><span class="n" data-page-node-id="8v9ZqWSuykrcUbpw3jTY2p">3</span>第三步：粗细改 1，画链子 120</div>
+      <div class="step" data-page-node-id="nXPer6RTxd5VJjsy6uQUCG"><span class="n" data-page-node-id="2ayBMEhIm24nKoqmUEamaF">4</span>第四步：银色、金色各 35，收工</div>
+    </div>
+    <pre data-page-node-id="9xTadYoOFhthjvduMmHV9w"><span class="kw" data-page-node-id="DswzCuLrFmcIfPoHK9GQCG">import</span> turtle
+turtle.<span class="fn" data-page-node-id="yTT5N8JgH6kRjUX5wxkTlY">pencolor</span>(<span class="str" data-page-node-id="mVR1xPiiOBZfqjRynM0NZr">"gold"</span>)           <span class="cm" data-page-node-id="YbvFEyvrTWQ5Uyirv5lH0e"># 金色</span>
+turtle.<span class="fn" data-page-node-id="ljsElX8IVrxwJONhMcGTnn">pensize</span>(<span class="num" data-page-node-id="ZiqUJP05x91aGUOOgt0lbc">20</span>)                  <span class="cm" data-page-node-id="AlNNSX81lmnVQyd84kYZ6i"># 粗棍</span>
+turtle.<span class="fn" data-page-node-id="h53lCyyXNjA4uMefvyAZyb">forward</span>(<span class="num" data-page-node-id="r8ugP3tOK5rex0sdnpxgm4">35</span>)
+turtle.<span class="fn" data-page-node-id="ezOXhl7i9qsCzPDwE5Z2rg">pencolor</span>(<span class="str" data-page-node-id="vwg5npIXBoqqxnWRnbGpDF">"silver"</span>)         <span class="cm" data-page-node-id="8B4xGe7tpVNrk3yEtUNLsh"># 银色</span>
+turtle.<span class="fn" data-page-node-id="hz1qNb0uSC51KTQzexqS0D">forward</span>(<span class="num" data-page-node-id="iHuQNB8IEHynW167yfKnbw">35</span>)
+turtle.<span class="fn" data-page-node-id="1ZJBijKF2AUZsOFlIAmewg">pensize</span>(<span class="num" data-page-node-id="qRStvTSWKEpafh5suKWkxu">1</span>)                   <span class="cm" data-page-node-id="FG02RVdvnkaNkjGINuXpdE"># 链子：最细</span>
+turtle.<span class="fn" data-page-node-id="TOBFeyPCgcMgPm5bIHX6Md">forward</span>(<span class="num" data-page-node-id="rxqoenEDEreE6PODMD4dTj">120</span>)                <span class="cm" data-page-node-id="HXbyaNEkCr4JSdMzTVub7J"># 中间的链子</span>
+turtle.<span class="fn" data-page-node-id="GNrGyfPUGdQFCM9BLA8evK">pensize</span>(<span class="num" data-page-node-id="VNec9GG5lQHkQ0k1T98Ah9">20</span>)                  <span class="cm" data-page-node-id="IgVFVFMNy3IfiNUkyiCrsr"># 恢复粗棍</span>
+turtle.<span class="fn" data-page-node-id="gTxrD3lackSzJaoWXkDpGf">forward</span>(<span class="num" data-page-node-id="fK1oHHkXpDJLkkY2MBdCRv">35</span>)
+turtle.<span class="fn" data-page-node-id="gv6lD6oysloI9Fu4c8E1oo">pencolor</span>(<span class="str" data-page-node-id="ni5LMTBz8lIRBWycsiCUsf">"gold"</span>)           <span class="cm" data-page-node-id="MAOzPxQXNPpetDMXsFlo0p"># 换回金色</span>
+turtle.<span class="fn" data-page-node-id="D6pEAuvNbaVNjVCjyvhrVJ">forward</span>(<span class="num" data-page-node-id="n15ghq7gIaIAQQjkue8k1a">35</span>)
+turtle.<span class="fn" data-page-node-id="kCagV1xEC5FgoloD76kwmV">hideturtle</span>()                <span class="cm" data-page-node-id="GxbbJTJFwlLhp3Wwh2jni8"># 隐藏画笔</span>
+turtle.<span class="fn" data-page-node-id="CKHMixNyHTOv11YZ24ltr8">done</span>()</pre>
+    <div class="preview" data-page-node-id="9R0ZPQ0p3YKCTcxePgoyhy">
+      <div class="pv-bar" data-page-node-id="iuPeaK90lLttw8aXZxFhBy"><i class="r" data-page-node-id="79zz15mEcVQ2p0KdvmOBcP"></i><i class="y" data-page-node-id="dkQClFPD1qFRfHrNl2HDgn"></i><i class="g" data-page-node-id="UOpKoHhPM3pdbCXHoCqoWh"></i><span data-page-node-id="kj2EGdUMeisvvFy9F0UgsV">运行结果</span>
+        <button type="button" class="run-btn" data-page-node-id="mQlIB1JYKMlYocyodmD0rx">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas" data-page-node-id="X8l4CfMzcKTlChAH9x3zBJ">
+        <div class="track" data-page-node-id="qYTFbEhrPtAWToHNvoA6GR">
+          <div class="seg" data-len="35"  data-thick="20" style="background:#ffd700" data-page-node-id="TiHPqvD0VxSu1LsH2gMMSh"></div>
+          <div class="seg" data-len="35"  data-thick="20" style="background:#c0c6cc" data-page-node-id="zL3p12HNEOhCiXd49G9eKn"></div>
+          <div class="seg thin" data-len="120" data-thick="2"  style="background:#868e96" data-page-node-id="GAHWj6g5uTwQKk9Ukj8Kqq"></div>
+          <div class="seg" data-len="35"  data-thick="20" style="background:#c0c6cc" data-page-node-id="eKvLnIIqaYsHCklY846jkB"></div>
+          <div class="seg" data-len="35"  data-thick="20" style="background:#ffd700" data-page-node-id="rKwHjm5EV3Fbrg37T2PnCD"></div>
+        </div>
+        <div class="seg-legend" data-page-node-id="52nTfqNEAjvhbYtriz2I96">
+          <span class="chip" data-page-node-id="FTPWcJf43hRFUYRaDzYYMT"><i style="background:#ffd700" data-page-node-id="411gbVe7Voz0YhejYEmM20"></i>gold 20 · <b data-page-node-id="X4rUpiB4L2ukUeruVZ9dT5">35</b></span>
+          <span class="chip" data-page-node-id="sMZjKJE3bEuSHgOE6geV3e"><i style="background:#c0c6cc" data-page-node-id="ZPtDE15JnHtwVnpt7AaOv2"></i>silver 20 · <b data-page-node-id="AV7EWuzMomIUtbph0j1M2L">35</b></span>
+          <span class="chip" data-page-node-id="ZneLJUC8EyGO0p9KgyCR7B"><i style="background:#868e96" data-page-node-id="U3SLRiotwi7zZ6cCW6wcwn"></i>链子 1 · <b data-page-node-id="PvRPI9lPl1Us3nzwNTMChG">120</b></span>
+          <span class="chip" data-page-node-id="EpHMf3XMRARoFaVZmqDsB2"><i style="background:#c0c6cc" data-page-node-id="3xeug3AsCsIhUnzJm6q1U7"></i>silver 20 · <b data-page-node-id="96QGuHOssPvFwtvnpkQv9j">35</b></span>
+          <span class="chip" data-page-node-id="yDeJyivhBpOs0bvhA3VrFN"><i style="background:#ffd700" data-page-node-id="krFlICzHBmcNTHFyG6fw2w"></i>gold 20 · <b data-page-node-id="u58bmB7HXcfFGeQKT9VnUj">35</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;" data-page-node-id="jTJ5aYaavO2oa2p1AxXaqB">
+      <div style="font-size:14.5px;font-weight:700;" data-page-node-id="W40TH3UWxSXilq7SXihiBR">🎨 参考颜色（换掉 "gold" / "silver" 试试看）</div>
+      <div class="swatches" data-page-node-id="MQBInd40A1SwGs9lRa1Sgm">
+        <span class="sw" data-page-node-id="mPYeTao05G2LxOjn4lTtaI"><i style="background:grey" data-page-node-id="cfPu3Eaz0sEMNwczykxJWf"></i>grey</span>
+        <span class="sw" data-page-node-id="UisN1wgWXHAZt2qOBljJbu"><i style="background:silver" data-page-node-id="81GguO21j5iPlclW5tMz6U"></i>silver</span>
+        <span class="sw" data-page-node-id="FwE6rQSTl4wbgKeUnoBaHU"><i style="background:brown" data-page-node-id="7F2BRvv2NOAaOCGdqiL1DG"></i>brown</span>
+        <span class="sw" data-page-node-id="ZKSeIStV94A9RYq6CQ02H4"><i style="background:orange" data-page-node-id="mh9hvgDcibodMuozCmjWk1"></i>orange</span>
+        <span class="sw" data-page-node-id="wRIChkHtNt7VrqJE8LSHGS"><i style="background:gold" data-page-node-id="A8Lorh4GbodzBpGfOQAvA1"></i>gold</span>
+        <span class="sw" data-page-node-id="tH2mWjPSm5Y9DMLH5fatA2"><i style="background:lime" data-page-node-id="ENDu2kN0PWnZ3yZmUuEt2d"></i>lime</span>
+        <span class="sw" data-page-node-id="QfzeZ2DOnBnywbpyKX7k3z"><i style="background:cyan" data-page-node-id="tSc4krHaXMCalU7DqcSFGA"></i>cyan</span>
+        <span class="sw" data-page-node-id="Hcg0uCyw62NCHQDMGHXNcF"><i style="background:violet" data-page-node-id="G0kPGFqWEHHQHKaX7qBzAo"></i>violet</span>
+        <span class="sw" data-page-node-id="cFjBVRRCOJ1eA6nCGErxuC"><i style="background:pink" data-page-node-id="9T2L9fItKID7P8cQO7EhEX"></i>pink</span>
+      </div>
+    </div>
+  </div>
+
+  <nav class="lesson-nav">
+    <a href="../P1-01/">← 上一课</a>
+    <a href="../">目录</a>
+    <a href="../P1-03/">下一课 →</a>
+  </nav>
+  <footer data-page-node-id="M685pX8bzHI7LDn6iE5kqf">VR空间 · 第2课 学习手册复习页 · 每天看一遍，海龟代码记得牢！</footer>
+</div>
+
+<script>
+// ===== 单词朗读（本地音频 + 远端兜底，兼容安卓微信）=====
+var showToast = function () { /* 占位，下面会覆盖 */ };
+
+(function () {
+  var btns = document.querySelectorAll('.speak-btn');
+  if (!btns.length) return;
+
+  // 本地音频文件（预生成的单词发音）
+  var LOCAL = {
+    turtle:  '../audio/word-turtle.mp3',
+    forward: '../audio/word-forward.mp3',
+    size:    '../audio/word-size.mp3',
+    color:   '../audio/word-color.mp3',
+    hide:    '../audio/word-hide.mp3',
+    done:    '../audio/word-done.mp3',
+    pen:     '../audio/word-pen.mp3',
+    import:  '../audio/word-import.mp3'
+  };
+  var REMOTE = function (w) {
+    return 'https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=2';
+  };
+
+  function sayIt(btn) {
+    var w = btn.getAttribute('data-en');
+    var a3 = new Audio('https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=1');
+    a3.preload = 'auto';
+    a3.addEventListener('ended', function () { btn.classList.remove('playing'); });
+    a3.addEventListener('error', function () {
+      btn.classList.remove('playing');
+      try {
+        if (!window.speechSynthesis) throw 0;
+        var u = new SpeechSynthesisUtterance(w);
+        u.lang = 'en-US'; u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      } catch (e) { showToast('当前网络不支持播放语音', 4000); }
+    });
+    a3.play().catch(function () { btn.classList.remove('playing'); });
+  }
+  function play(btn, url) {
+    btn.classList.add('playing');
+    var audio = new Audio(url);
+    audio.preload = 'auto';
+    var reset = function () { btn.classList.remove('playing'); };
+    audio.addEventListener('ended', reset);
+    audio.addEventListener('error', function () {
+      if (url !== REMOTE(btn.getAttribute('data-en'))) {
+        reset();
+        var a2 = new Audio(REMOTE(btn.getAttribute('data-en')));
+        a2.preload = 'auto';
+        a2.addEventListener('ended', reset);
+        a2.addEventListener('error', function () {
+          reset();
+          sayIt(btn);
+        });
+        a2.play().catch(reset);
+      } else {
+        reset();
+        sayIt(btn);
+      }
+    });
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () { reset(); });
+  }
+
+  Array.prototype.forEach.call(btns, function (b) {
+    var word = b.getAttribute('data-en');
+    if (!word) return;
+    b.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (b.disabled) return;
+      play(b, LOCAL[word] || REMOTE(word));
+    });
+  });
+})();
+
+// ===== 海龟绘制动画 =====
+(function () {
+  var canvases = document.querySelectorAll('.preview');
+  Array.prototype.forEach.call(canvases, function (pv) {
+    var segs = pv.querySelectorAll('.seg');
+    if (!segs.length) return;
+
+    var total = 0;
+    Array.prototype.forEach.call(segs, function (s) {
+      var len = parseFloat(s.getAttribute('data-len')) || 0;
+      var th  = parseFloat(s.getAttribute('data-thick')) || 2;
+      s.style.height = th + 'px';
+      total += len;
+    });
+
+    function setFinal() {
+      Array.prototype.forEach.call(segs, function (s) {
+        var len = parseFloat(s.getAttribute('data-len')) || 0;
+        s.style.transition = 'none';
+        s.style.width = (len / total * 100) + '%';
+      });
+    }
+    function animate() {
+      Array.prototype.forEach.call(segs, function (s) { s.style.transition = 'none'; s.style.width = '0%'; });
+      var delay = 60;
+      Array.prototype.forEach.call(segs, function (s, i) {
+        var len = parseFloat(s.getAttribute('data-len')) || 0;
+        var pct = len / total * 100;
+        var dur = Math.max(260, pct * 9);
+        setTimeout(function () {
+          s.style.transition = 'width ' + dur + 'ms linear';
+          s.style.width = pct + '%';
+        }, delay);
+        delay += dur;
+      });
+    }
+
+    setFinal();
+    var btn = pv.querySelector('.run-btn');
+    if (btn) btn.addEventListener('click', animate);
+  });
+})();
+
+// ===== 下载/打印 PDF（兼容手机）=====
+(function () {
+  var btn = document.getElementById('pdfBtn');
+  var toast = document.getElementById('toast');
+  if (!btn) return;
+
+  var SAVE_NAME = '第2课-VR空间-海龟绘图复习.pdf';
+  var timer = null;
+  var pdfTimer = null;
+
+  showToast = function (msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function () { toast.classList.remove('show'); }, ms || 4500);
+  };
+
+  function pdfTip(msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(pdfTimer);
+    pdfTimer = setTimeout(function () { toast.classList.remove('show'); }, ms || 5000);
+  }
+  btn.addEventListener('click', function () {
+    var ua = navigator.userAgent || '';
+    var saved = document.title;
+    document.title = '第2课-VR空间-海龟绘图复习';
+    if (/MicroMessenger/i.test(ua)) {
+      pdfTip('微信里请点右上角「…」→ 在浏览器打开，再点本按钮保存 PDF', 6000);
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      pdfTip('弹出预览后，点右上角分享 →「打印 / 存储到文件」即可存为 PDF', 6000);
+    } else if (/Android/i.test(ua)) {
+      pdfTip('打印界面里把「目标打印机」选成「另存为 PDF」再保存', 6000);
+    } else {
+      pdfTip('打印窗口里选择「另存为 PDF」，然后点保存', 6000);
+    }
+    setTimeout(function () { window.print(); }, 260);
+    setTimeout(function () { document.title = saved; }, 60000);
+  });
+})();
+</script>
+
+</body>
+</html>

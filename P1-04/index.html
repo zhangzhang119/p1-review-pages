@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P1-04 · OMO的设计店 知识点复习</title>
+<style>
+  :root {
+    --primary: #4f6ef7;
+    --primary-dark: #3b55d9;
+    --accent: #ffb703;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --text: #2b2f3a;
+    --muted: #6b7280;
+    --code-bg: #1e1e2e;
+    --code-text: #e6e6ef;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(79, 110, 247, 0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 40px;
+  }
+  .hero {
+    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cf0 55%, #9d4edd 100%);
+    color: #fff; padding: 44px 20px 68px; text-align: center; position: relative;
+  }
+  .hero .lesson-tag {
+    display: inline-block; background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
+    padding: 4px 16px; font-size: 14px; letter-spacing: 2px; margin-bottom: 14px;
+  }
+  .hero h1 { font-size: clamp(24px, 5vw, 38px); letter-spacing: 2px; }
+  .hero p.sub { margin-top: 10px; opacity: 0.92; font-size: 15px; }
+  .hero .dots { position: absolute; bottom: -34px; left: 0; right: 0; display: flex; justify-content: center; gap: 14px; }
+  .hero .dots span { width: 68px; height: 68px; border-radius: 50%; border: 5px solid var(--bg); box-shadow: var(--shadow); }
+  .d1 { background: #22b573; } .d2 { background: var(--accent); } .d3 { background: #ef476f; }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 30px 18px 0; }
+
+  .goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 26px; }
+  .goal { display: flex; align-items: flex-start; gap: 8px; background: #fff; border-radius: 12px;
+          padding: 10px 14px; font-size: 14px; box-shadow: var(--shadow); border-left: 4px solid var(--primary); }
+  .goal:nth-child(2) { border-left-color: #22b573; }
+  .goal:nth-child(3) { border-left-color: var(--accent); }
+  .goal .g-n { font-weight: 800; color: var(--primary); }
+  .goal:nth-child(2) .g-n { color: #158a56; }
+  .goal:nth-child(3) .g-n { color: #c98a00; }
+
+  .section-title { display: flex; align-items: center; gap: 10px; margin: 36px 0 18px; font-size: 20px; font-weight: 700; }
+  .section-title .num { width: 34px; height: 34px; border-radius: 10px; background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px;
+          border-top: 5px solid var(--primary); transition: transform .2s; }
+  .card:hover { transform: translateY(-4px); }
+  .card.green { border-top-color: #22b573; }
+  .card.yellow { border-top-color: var(--accent); }
+  .card.pink { border-top-color: #ef476f; }
+  .card.purple { border-top-color: #9d4edd; }
+  .word { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .word .en { font-size: 25px; font-weight: 800; color: var(--primary-dark); font-family: Consolas, monospace; }
+  .card.green .word .en { color: #158a56; }
+  .card.yellow .word .en { color: #c98a00; }
+  .card.pink .word .en { color: #d63a63; }
+  .card.purple .word .en { color: #7b3fbf; }
+  .word .ipa { font-size: 15px; color: var(--muted); }
+  .word .cn { font-size: 16px; font-weight: 600; }
+  .speak-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: auto;
+    background: linear-gradient(135deg, #4f6ef7, #7c5cf0); color: #fff; border: none; border-radius: 50%;
+    font-size: 15px; cursor: pointer; box-shadow: 0 3px 10px rgba(79,110,247,.32);
+    -webkit-tap-highlight-color: transparent; transition: transform .15s, box-shadow .15s, background .25s;
+    font-family: inherit; flex-shrink: 0; line-height: 1;
+  }
+  .speak-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(79,110,247,.42); }
+  .speak-btn:active { transform: scale(0.94); }
+  .speak-btn.playing { background: linear-gradient(135deg, #158a56, #2ec27e); animation: pulse 1s infinite; }
+  .speak-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(46,194,126,.55); } 50% { box-shadow: 0 0 0 8px rgba(46,194,126,0); } }
+  .card ul { list-style: none; margin-top: 12px; }
+  .card ul li { padding-left: 20px; position: relative; font-size: 14.5px; margin-top: 6px; color: #3c4152; }
+  .card ul li::before { content: ""; position: absolute; left: 2px; top: 9px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--primary); opacity: .6; }
+  .card.green ul li::before { background: #22b573; }
+  .card.yellow ul li::before { background: var(--accent); }
+  .card.pink ul li::before { background: #ef476f; }
+  .card.purple ul li::before { background: #9d4edd; }
+
+  .param-note { margin-top: 14px; background: #eef2ff; border-radius: 10px; padding: 10px 14px;
+                font-size: 13.5px; color: var(--primary-dark); }
+  .param-note + .param-note { margin-top: 10px; }
+  .param-note b { font-family: Consolas, monospace; }
+  .param-note.warn { background: #fff7e6; color: #8a5a00; }
+
+  pre { background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 16px 18px;
+        overflow-x: auto; font-family: Consolas, "Courier New", monospace; font-size: 14px; line-height: 1.8; margin-top: 12px; }
+  pre .kw { color: #c792ea; } pre .fn { color: #82aaff; } pre .str { color: #c3e88d; }
+  pre .num { color: #f78c6c; } pre .cm { color: #676e95; }
+
+  .project { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 22px; }
+  .project h3 { font-size: 18px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .project h3 .tag { font-size: 12px; font-weight: 600; background: #fff3d6; color: #9a6b00; padding: 2px 10px; border-radius: 999px; }
+  .project .desc { font-size: 14.5px; color: #3c4152; margin-top: 8px; }
+  .project .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 12px; }
+  .step { display: flex; align-items: flex-start; gap: 8px; background: #f6f7fb; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+  .step .n { width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+  .preview { margin-top: 14px; border-radius: 12px; overflow: hidden; border: 1px solid #e5e8f2; background: #fff; }
+  .pv-bar { display: flex; align-items: center; gap: 6px; background: #2a2a3e; padding: 8px 12px; }
+  .pv-bar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .pv-bar .r { background: #ff5f57; } .pv-bar .y { background: #febc2e; } .pv-bar .g { background: #28c840; }
+  .pv-bar span { font-size: 12px; color: #9aa0c0; margin-left: 6px; }
+  .pv-bar .run-btn { margin-left: auto; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+    color: #fff; font-family: inherit; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+  .pv-bar .run-btn:hover { background: rgba(255,255,255,.26); }
+  /* 控制台输出预览（print / input 类程序） */
+  .pv-body { padding: 16px 18px; font-family: Consolas, "Courier New", monospace; font-size: 14.5px; line-height: 1.9;
+             color: #e6e6ef; background: #1e1e2e; white-space: pre; overflow-x: auto; }
+  .pv-body .say { color: #82aaff; }
+  /* 海龟画布预览（turtle 类程序） */
+  .pv-canvas { padding: 26px 16px 20px; background: #fbfcff; }
+  .track { display: flex; align-items: center; height: 44px; border-left: 2px dashed #d8def5; }
+  .seg { height: 20px; width: 0; flex: 0 0 auto; border-radius: 3px; box-shadow: inset 0 -2px 0 rgba(0,0,0,.10); }
+  .seg.thin { border-radius: 0; box-shadow: none; }
+  .seg-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e8f2; }
+  .chip { display: flex; align-items: center; gap: 6px; background: #f6f7fb; border-radius: 999px;
+          padding: 4px 12px; font-size: 12.5px; color: #4b5165; }
+  .chip i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+  .chip b { font-family: Consolas, monospace; color: #3c4152; }
+
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .sw { display: flex; align-items: center; gap: 7px; border: 1px solid #e5e8f2; border-radius: 999px;
+        padding: 4px 12px 4px 5px; font-size: 12.5px; font-family: Consolas, monospace; background: #fff; }
+  .sw i { width: 18px; height: 18px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.08); }
+  .subhead { font-size: 14.5px; font-weight: 700; margin-top: 16px; }
+
+  footer { text-align: center; margin-top: 44px; font-size: 13px; color: var(--muted); }
+
+  .back-btn { position: fixed; top: 16px; left: 16px; z-index: 999; display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; color: var(--primary-dark); border: 1px solid #dfe4ff; border-radius: 999px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700; font-family: inherit; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(79,110,247,.22); transition: transform .15s; }
+  .back-btn:hover { transform: translateY(-2px); }
+  .pdf-btn { position: fixed; top: 16px; right: 16px; z-index: 999; display: inline-flex; align-items: center; gap: 7px;
+    background: #fff; color: var(--primary-dark); border: 1px solid #dfe4ff; border-radius: 999px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(79,110,247,.22); cursor: pointer; }
+  .pdf-btn:hover { transform: translateY(-2px); }
+  .pdf-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .toast { position: fixed; left: 50%; bottom: 26px; z-index: 1000; transform: translateX(-50%) translateY(14px);
+    background: rgba(43,47,58,.95); color: #fff; font-size: 13.5px; line-height: 1.6; text-align: center;
+    padding: 10px 16px; border-radius: 12px; max-width: 88vw; opacity: 0; pointer-events: none;
+    box-shadow: 0 6px 22px rgba(0,0,0,.2); transition: opacity .25s, transform .25s; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 34px 16px 60px; }
+    .hero .dots span { width: 52px; height: 52px; }
+    pre { font-size: 13px; padding: 14px; }
+    .speak-btn { width: 28px; height: 28px; font-size: 13px; }
+    .back-btn { top: 10px; left: 10px; padding: 8px 13px; font-size: 13px; }
+    .pdf-btn { top: 10px; right: 10px; padding: 8px 13px; font-size: 13px; }
+    .pv-canvas { padding: 22px 12px 16px; }
+  }
+
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { background: #fff !important; } body { padding-bottom: 0; }
+    .pdf-btn, .toast, .speak-btn, .run-btn, .back-btn { display: none !important; }
+    .hero { padding: 26px 12px 46px !important; }
+    .hero .dots span { border-color: #fff !important; }
+    .container { max-width: 100%; padding: 18px 0 0; }
+    .card, .project, pre, .preview, .param-note, .step, .goal { break-inside: avoid; page-break-inside: avoid; box-shadow: none !important; }
+    .card, .project, .goal { border: 1px solid #e5e8f2; }
+    .section-title { break-after: avoid; page-break-after: avoid; margin: 22px 0 12px; }
+    .card:hover { transform: none; } .cards { gap: 12px; } .seg { transition: none !important; }
+  }
+
+  /* ---- 课次翻页导航 ---- */
+  .lesson-nav{display:flex;justify-content:space-between;align-items:center;gap:9px;
+    margin:26px 0 16px;padding-top:18px;border-top:1px dashed #d8def0}
+  .lesson-nav a{flex:1;text-align:center;background:#fff;border:1px solid #e2e8f8;
+    border-radius:10px;padding:11px 6px;font-size:13px;color:#4f6ef7;
+    text-decoration:none;font-weight:600;line-height:1.3}
+  .lesson-nav a:active{transform:scale(.97)}
+  .lesson-nav a.dis{color:#b6bfd4;background:#f7f9ff;border-color:#eef1f8;pointer-events:none}
+  @media (max-width:420px){ .lesson-nav a{font-size:12px;padding:10px 4px} }
+  @media print{ .lesson-nav{display:none} }
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="../">← 目录</a>
+<button class="pdf-btn" id="pdfBtn" type="button" title="保存为 PDF">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
+  </svg>
+  下载 PDF
+</button>
+<div class="toast" id="toast"></div>
+
+<div class="hero">
+  <div class="lesson-tag">OMO的设计店 · 第4课</div>
+  <h1>圆点与背景知识点复习</h1>
+  <p class="sub">dot 圆点 · bgcolor 背景 · speed 速度 · pensize 粗细</p>
+  <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+</div>
+
+<div class="container">
+  <!-- 本课目标 -->
+  <div class="goals">
+    <div class="goal"><span class="g-n">01</span><span>认识并使用 <strong>dot()</strong> 圆点函数</span></div>
+    <div class="goal"><span class="g-n">02</span><span>学会设置画布<strong>背景颜色</strong>（bgcolor）</span></div>
+    <div class="goal"><span class="g-n">03</span><span>掌握画笔<strong>速度设置</strong>（speed）</span></div>
+  </div>
+
+  <!-- 一、核心知识点 -->
+  <div class="section-title"><span class="num">1</span>核心知识点</div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="word"><span class="en">dot()</span><span class="ipa">[dɑːt]</span><span class="cn">圆点</span><button type="button" class="speak-btn" data-en="dot" aria-label="朗读 dot">🔊</button></div>
+      <ul>
+        <li>turtle 库的<strong>常用函数</strong></li>
+        <li>在画笔当前位置画一个<strong>实心圆点</strong></li>
+        <li><strong>dot(size, color)</strong>：第一个参数是直径，第二个是颜色</li>
+        <li>比如 dot(60, "yellow") 画一个直径 60 的黄色圆</li>
+      </ul>
+      <pre>turtle.<span class="fn">dot</span>(<span class="num">60</span>, <span class="str">"yellow"</span>)   <span class="cm"># 画一个黄色圆点</span></pre>
+    </div>
+
+    <div class="card green">
+      <div class="word"><span class="en">bgcolor()</span><span class="ipa">[bækɡraʊnd]</span><span class="cn">背景</span><button type="button" class="speak-btn" data-en="background" aria-label="朗读 background">🔊</button></div>
+      <ul>
+        <li>用来设置<strong>画布背景颜色</strong></li>
+        <li>括号里写<strong>带引号的英文颜色名</strong></li>
+        <li>比如 bgcolor("red") 把背景变红</li>
+        <li>一般写在<strong>画图形之前</strong></li>
+      </ul>
+      <pre>turtle.<span class="fn">bgcolor</span>(<span class="str">"red"</span>)      <span class="cm"># 背景变成红色</span></pre>
+    </div>
+
+    <div class="card yellow">
+      <div class="word"><span class="en">speed()</span><span class="ipa">[spiːd]</span><span class="cn">速度</span><button type="button" class="speak-btn" data-en="speed" aria-label="朗读 speed">🔊</button></div>
+      <ul>
+        <li>设置<strong>画笔移动速度</strong></li>
+        <li>参数范围 <strong>0 到 10</strong></li>
+        <li><strong>0 最快</strong>，1 到 10 数值越大越快，1 最慢</li>
+        <li>比如 speed(0) 让画图瞬间完成</li>
+      </ul>
+      <pre>turtle.<span class="fn">speed</span>(<span class="num">0</span>)            <span class="cm"># 最快速度</span></pre>
+    </div>
+
+    <div class="card pink">
+      <div class="word"><span class="en">pencolor()</span><span class="ipa">[ˈkʌlər]</span><span class="cn">颜色</span><button type="button" class="speak-btn" data-en="color" aria-label="朗读 color">🔊</button></div>
+      <ul>
+        <li>设置<strong>画笔（线条）颜色</strong></li>
+        <li>括号里写<strong>带引号的英文颜色名</strong></li>
+        <li>比如 pencolor("yellow") 画笔变黄</li>
+        <li>要和 bgcolor 区分：一个管线条，一个管背景</li>
+      </ul>
+      <pre>turtle.<span class="fn">pencolor</span>(<span class="str">"yellow"</span>) <span class="cm"># 画笔变黄色</span></pre>
+    </div>
+
+    <div class="card purple">
+      <div class="word"><span class="en">pensize()</span><span class="ipa">[saɪz]</span><span class="cn">大小 / 粗细</span><button type="button" class="speak-btn" data-en="size" aria-label="朗读 size">🔊</button></div>
+      <ul>
+        <li>设置<strong>画笔粗细</strong></li>
+        <li>括号里写<strong>数字</strong>，数字越大线越粗</li>
+        <li>比如 pensize(100) 画出很粗的杆</li>
+        <li>要写在<strong>画线之前</strong>才生效</li>
+      </ul>
+      <pre>turtle.<span class="fn">pensize</span>(<span class="num">100</span>)       <span class="cm"># 画笔粗细 100</span></pre>
+    </div>
+
+  </div>
+
+  <div class="param-note">
+    💡 <strong>dot 的两个参数</strong>：<b>dot(直径, 颜色)</b>，第一个是圆的<strong>大小</strong>，第二个是<strong>颜色名</strong>；颜色名要用英文引号包起来。
+  </div>
+  <div class="param-note warn">
+    💡 <strong>背景 vs 画笔颜色</strong>：<b>bgcolor()</b> 改的是整张画布的底色，<b>pencolor()</b> 改的是线条和圆点描边颜色，两者不一样，别写混。
+  </div>
+  <div class="param-note warn">
+    💡 <strong>引号规则</strong>：颜色名是文字，必须加<strong>英文引号</strong>，例如 <b>bgcolor("red")</b>；而 <b>speed(0)</b>、<b>dot(60, ...)</b> 里的数字是数值，<strong>不能</strong>加引号。
+  </div>
+
+  <!-- 二、本课英文单词表 -->
+  <div class="section-title"><span class="num">2</span>本课英文单词表</div>
+  <div class="cards">
+    <div class="card">
+      <div class="word"><span class="en">dot</span><span class="ipa">[dɑːt]</span><span class="cn">圆点</span><button type="button" class="speak-btn" data-en="dot" aria-label="朗读 dot">🔊</button></div>
+    </div>
+    <div class="card green">
+      <div class="word"><span class="en">background</span><span class="ipa">[bækɡraʊnd]</span><span class="cn">背景</span><button type="button" class="speak-btn" data-en="background" aria-label="朗读 background">🔊</button></div>
+    </div>
+    <div class="card yellow">
+      <div class="word"><span class="en">color</span><span class="ipa">[ˈkʌlər]</span><span class="cn">颜色</span><button type="button" class="speak-btn" data-en="color" aria-label="朗读 color">🔊</button></div>
+    </div>
+    <div class="card pink">
+      <div class="word"><span class="en">speed</span><span class="ipa">[spiːd]</span><span class="cn">速度</span><button type="button" class="speak-btn" data-en="speed" aria-label="朗读 speed">🔊</button></div>
+    </div>
+    <div class="card purple">
+      <div class="word"><span class="en">pensize</span><span class="ipa">[saɪz]</span><span class="cn">大小</span><button type="button" class="speak-btn" data-en="size" aria-label="朗读 size">🔊</button></div>
+    </div>
+    <div class="card">
+      <div class="word"><span class="en">pencolor</span><span class="ipa">[ˈkʌlər]</span><span class="cn">颜色</span><button type="button" class="speak-btn" data-en="color" aria-label="朗读 color">🔊</button></div>
+    </div>
+    <div class="card green">
+      <div class="word"><span class="en">turtle</span><span class="ipa">[ˈtɜːtl]</span><span class="cn">海龟</span><button type="button" class="speak-btn" data-en="turtle" aria-label="朗读 turtle">🔊</button></div>
+    </div>
+    <div class="card yellow">
+      <div class="word"><span class="en">forward</span><span class="ipa">[ˈfɔːrwərd]</span><span class="cn">前进</span><button type="button" class="speak-btn" data-en="forward" aria-label="朗读 forward">🔊</button></div>
+    </div>
+  </div>
+
+  <!-- 三、程序参考 -->
+  <div class="section-title"><span class="num">3</span>程序参考 · OMO的设计店</div>
+
+  <!-- 招牌 -->
+  <div class="project">
+    <h3>🛞 绘制轮胎招牌<span class="tag">广告招牌 · bgcolor + dot</span></h3>
+    <p class="desc">浅灰背景上，用三个不同大小的圆点叠出轮胎（外胎、轮毂、轮轴）。</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>第一步：导入库，背景设为 lightgrey</div>
+      <div class="step"><span class="n">2</span>第二步：dot(400, "black") 画外胎</div>
+      <div class="step"><span class="n">3</span>第三步：dot(250, "lightsteelblue") 画轮毂</div>
+      <div class="step"><span class="n">4</span>第四步：dot(50, "slategrey") 画轮轴，隐藏结束</div>
+    </div>
+    <pre><span class="kw">import</span> turtle <span class="kw">as</span> t
+t.<span class="fn">bgcolor</span>(<span class="str">"lightgrey"</span>)        <span class="cm"># 浅灰背景</span>
+t.<span class="fn">dot</span>(<span class="num">400</span>, <span class="str">"black"</span>)         <span class="cm"># 外胎</span>
+t.<span class="fn">dot</span>(<span class="num">250</span>, <span class="str">"lightsteelblue"</span>)  <span class="cm"># 轮毂</span>
+t.<span class="fn">dot</span>(<span class="num">50</span>, <span class="str">"slategrey"</span>)       <span class="cm"># 轮轴</span>
+t.<span class="fn">hideturtle</span>()
+t.<span class="fn">done</span>()</pre>
+    <div class="preview">
+      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果（轮胎招牌）</span>
+        <button type="button" class="run-btn">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas">
+        <div class="track">
+          <div class="seg" data-len="400" data-thick="400" style="background:#000000"></div>
+          <div class="seg" data-len="250" data-thick="250" style="background:#b0c4de"></div>
+          <div class="seg" data-len="50" data-thick="50" style="background:#708090"></div>
+        </div>
+        <div class="seg-legend">
+          <span class="chip"><i style="background:#000000"></i>black 粗细 <b>400</b> · 直径 <b>400</b>（外胎）</span>
+          <span class="chip"><i style="background:#b0c4de"></i>lightsteelblue 粗细 <b>250</b> · 直径 <b>250</b>（轮毂）</span>
+          <span class="chip"><i style="background:#708090"></i>slategrey 粗细 <b>50</b> · 直径 <b>50</b>（轮轴）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 月亮 -->
+  <div class="project">
+    <h3>🌙 绘制月亮海报<span class="tag">月亮海报 · dot + forward</span></h3>
+    <p class="desc">深蓝背景上画黄色圆月，再向前移动后用同色圆点遮出月牙。</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>第一步：背景设为 midnightblue</div>
+      <div class="step"><span class="n">2</span>第二步：dot(200, "yellow") 画圆月</div>
+      <div class="step"><span class="n">3</span>第三步：pencolor("yellow")，forward(50) 移动画笔</div>
+      <div class="step"><span class="n">4</span>第四步：dot(150, "midnightblue") 遮出月牙，隐藏结束</div>
+    </div>
+    <pre><span class="kw">import</span> turtle <span class="kw">as</span> t
+t.<span class="fn">bgcolor</span>(<span class="str">"midnightblue"</span>)    <span class="cm"># 深蓝夜空</span>
+t.<span class="fn">dot</span>(<span class="num">200</span>, <span class="str">"yellow"</span>)         <span class="cm"># 圆月</span>
+t.<span class="fn">pencolor</span>(<span class="str">"yellow"</span>)
+t.<span class="fn">forward</span>(<span class="num">50</span>)                 <span class="cm"># 向右移动画笔</span>
+t.<span class="fn">dot</span>(<span class="num">150</span>, <span class="str">"midnightblue"</span>)    <span class="cm"># 同色圆点遮出月牙</span>
+t.<span class="fn">hideturtle</span>()
+t.<span class="fn">done</span>()</pre>
+    <div class="preview">
+      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果（月亮海报）</span>
+        <button type="button" class="run-btn">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas">
+        <div class="track">
+          <div class="seg" data-len="200" data-thick="200" style="background:#ffff00"></div>
+          <div class="seg thin" data-len="50" data-thick="2" style="background:#ffff00"></div>
+          <div class="seg" data-len="150" data-thick="150" style="background:#191970"></div>
+        </div>
+        <div class="seg-legend">
+          <span class="chip"><i style="background:#ffff00"></i>yellow 粗细 <b>200</b> · 直径 <b>200</b>（圆月）</span>
+          <span class="chip"><i style="background:#ffff00"></i>yellow 细线 长度 <b>50</b>（移动）</span>
+          <span class="chip"><i style="background:#191970"></i>midnightblue 粗细 <b>150</b> · 直径 <b>150</b>（遮盖）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 哑铃 -->
+  <div class="project">
+    <h3>🏋️ 绘制哑铃商标<span class="tag">健身房商标 · pensize + dot</span></h3>
+    <p class="desc">用粗笔画出握手横杆，再在两端点上黑色圆点当作铁片。</p>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>第一步：pensize(100)、pencolor("lightblue")，forward(100) 画横杆</div>
+      <div class="step"><span class="n">2</span>第二步：dot(60, "black") 画右侧铁片</div>
+      <div class="step"><span class="n">3</span>第三步：pensize(20)、pencolor("brown")，backward(100) 回到左侧</div>
+      <div class="step"><span class="n">4</span>第四步：dot(60, "black") 画左侧铁片，隐藏结束</div>
+    </div>
+    <pre><span class="kw">import</span> turtle <span class="kw">as</span> t
+t.<span class="fn">pensize</span>(<span class="num">100</span>)
+t.<span class="fn">pencolor</span>(<span class="str">"lightblue"</span>)
+t.<span class="fn">forward</span>(<span class="num">100</span>)               <span class="cm"># 画中间握手横杆</span>
+t.<span class="fn">dot</span>(<span class="num">60</span>, <span class="str">"black"</span>)           <span class="cm"># 右侧铁片</span>
+t.<span class="fn">pensize</span>(<span class="num">20</span>)
+t.<span class="fn">pencolor</span>(<span class="str">"brown"</span>)
+t.<span class="fn">backward</span>(<span class="num">100</span>)              <span class="cm"># 回到左侧</span>
+t.<span class="fn">dot</span>(<span class="num">60</span>, <span class="str">"black"</span>)           <span class="cm"># 左侧铁片</span>
+t.<span class="fn">hideturtle</span>()
+t.<span class="fn">done</span>()</pre>
+    <div class="preview">
+      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果（哑铃商标）</span>
+        <button type="button" class="run-btn">▶ 播放绘制过程</button>
+      </div>
+      <div class="pv-canvas">
+        <div class="track">
+          <div class="seg" data-len="100" data-thick="100" style="background:#add8e6"></div>
+          <div class="seg" data-len="60" data-thick="60" style="background:#000000"></div>
+          <div class="seg" data-len="100" data-thick="20" style="background:#a52a2a"></div>
+          <div class="seg" data-len="60" data-thick="60" style="background:#000000"></div>
+        </div>
+        <div class="seg-legend">
+          <span class="chip"><i style="background:#add8e6"></i>lightblue 粗细 <b>100</b> · 长度 <b>100</b>（横杆）</span>
+          <span class="chip"><i style="background:#000000"></i>black 粗细 <b>60</b> · 直径 <b>60</b>（右铁片）</span>
+          <span class="chip"><i style="background:#a52a2a"></i>brown 粗细 <b>20</b> · 长度 <b>100</b>（回到左侧）</span>
+          <span class="chip"><i style="background:#000000"></i>black 粗细 <b>60</b> · 直径 <b>60</b>（左铁片）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="lesson-nav">
+    <a href="../P1-03/">← 上一课</a>
+    <a href="../">目录</a>
+    <a href="../P1-05/">下一课 →</a>
+  </nav>
+  <footer>P1-04 · OMO的设计店 学习手册复习页 · 每天看一遍，代码记得牢！</footer>
+</div>
+
+<script>
+var showToast = function () {};
+
+// ===== 单词朗读（本地 mp3 + 有道远端兜底）=====
+(function () {
+  var btns = document.querySelectorAll('.speak-btn');
+  if (!btns.length) return;
+  var REMOTE = function (w) { return 'https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=2'; };
+  function sayIt(btn) {
+    var w = btn.getAttribute('data-en');
+    var a3 = new Audio('https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=1');
+    a3.preload = 'auto';
+    a3.addEventListener('ended', function () { btn.classList.remove('playing'); });
+    a3.addEventListener('error', function () {
+      btn.classList.remove('playing');
+      try {
+        if (!window.speechSynthesis) throw 0;
+        var u = new SpeechSynthesisUtterance(w);
+        u.lang = 'en-US'; u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      } catch (e) { showToast('当前网络不支持播放语音', 4000); }
+    });
+    a3.play().catch(function () { btn.classList.remove('playing'); });
+  }
+  function play(btn, url) {
+    btn.classList.add('playing');
+    var audio = new Audio(url);
+    audio.preload = 'auto';
+    var reset = function () { btn.classList.remove('playing'); };
+    audio.addEventListener('ended', reset);
+    audio.addEventListener('error', function () {
+      if (url !== REMOTE(btn.getAttribute('data-en'))) {
+        reset();
+        var a2 = new Audio(REMOTE(btn.getAttribute('data-en')));
+        a2.preload = 'auto';
+        a2.addEventListener('ended', reset);
+        a2.addEventListener('error', function () { reset(); sayIt(btn); });
+        a2.play().catch(reset);
+      } else { reset(); sayIt(btn); }
+    });
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () { reset(); });
+  }
+  Array.prototype.forEach.call(btns, function (b) {
+    var word = b.getAttribute('data-en');
+    if (!word) return;
+    b.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (b.disabled) return;
+      play(b, '../audio/word-' + word + '.mp3');
+    });
+  });
+})();
+
+// ===== 海龟绘制动画（仅 .pv-canvas 中存在 .seg 时生效）=====
+(function () {
+  var canvases = document.querySelectorAll('.preview');
+  Array.prototype.forEach.call(canvases, function (pv) {
+    var segs = pv.querySelectorAll('.seg');
+    if (!segs.length) return;
+    var total = 0;
+    Array.prototype.forEach.call(segs, function (s) {
+      var len = parseFloat(s.getAttribute('data-len')) || 0;
+      var th = parseFloat(s.getAttribute('data-thick')) || 2;
+      s.style.height = th + 'px';
+      total += len;
+    });
+    function animate() {
+      Array.prototype.forEach.call(segs, function (s) { s.style.transition = 'none'; s.style.width = '0%'; });
+      var delay = 60;
+      Array.prototype.forEach.call(segs, function (s) {
+        var pct = (parseFloat(s.getAttribute('data-len')) || 0) / total * 100;
+        var dur = Math.max(260, pct * 9);
+        setTimeout(function () { s.style.transition = 'width ' + dur + 'ms linear'; s.style.width = pct + '%'; }, delay);
+        delay += dur;
+      });
+    }
+    Array.prototype.forEach.call(segs, function (s) {
+      s.style.width = ((parseFloat(s.getAttribute('data-len')) || 0) / total * 100) + '%';
+    });
+    var btn = pv.querySelector('.run-btn');
+    if (btn) btn.addEventListener('click', animate);
+  });
+})();
+
+// ===== 下载 / 打印 PDF =====
+(function () {
+  var btn = document.getElementById('pdfBtn');
+  var toast = document.getElementById('toast');
+  if (!btn) return;
+  var timer = null;
+  var pdfTimer = null;
+  showToast = function (msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function () { toast.classList.remove('show'); }, ms || 4500);
+  };
+  function pdfTip(msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(pdfTimer);
+    pdfTimer = setTimeout(function () { toast.classList.remove('show'); }, ms || 5000);
+  }
+  btn.addEventListener('click', function () {
+    var ua = navigator.userAgent || '';
+    var saved = document.title;
+    document.title = 'P1-04-OMO设计店复习';
+    if (/MicroMessenger/i.test(ua)) {
+      pdfTip('微信里请点右上角「…」→ 在浏览器打开，再点本按钮保存 PDF', 6000);
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      pdfTip('弹出预览后，点右上角分享 →「打印 / 存储到文件」即可存为 PDF', 6000);
+    } else if (/Android/i.test(ua)) {
+      pdfTip('打印界面里把「目标打印机」选成「另存为 PDF」再保存', 6000);
+    } else {
+      pdfTip('打印窗口里选择「另存为 PDF」，然后点保存', 6000);
+    }
+    setTimeout(function () { window.print(); }, 260);
+    setTimeout(function () { document.title = saved; }, 60000);
+  });
+})();
+</script>
+</body>
+</html>

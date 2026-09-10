@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>超级猜猜猜 · 第8课 条件判断与比较运算知识点复习</title>
+<style>
+  :root {
+    --primary: #4f6ef7;
+    --primary-dark: #3b55d9;
+    --accent: #ffb703;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --text: #2b2f3a;
+    --muted: #6b7280;
+    --code-bg: #1e1e2e;
+    --code-text: #e6e6ef;
+    --radius: 16px;
+    --shadow: 0 4px 20px rgba(79, 110, 247, 0.10);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 40px;
+  }
+  .hero {
+    background: linear-gradient(135deg, #4f6ef7 0%, #7c5cf0 55%, #9d4edd 100%);
+    color: #fff; padding: 44px 20px 68px; text-align: center; position: relative;
+  }
+  .hero .lesson-tag {
+    display: inline-block; background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
+    padding: 4px 16px; font-size: 14px; letter-spacing: 2px; margin-bottom: 14px;
+  }
+  .hero h1 { font-size: clamp(24px, 5vw, 38px); letter-spacing: 2px; }
+  .hero p.sub { margin-top: 10px; opacity: 0.92; font-size: 15px; }
+  .hero .dots { position: absolute; bottom: -34px; left: 0; right: 0; display: flex; justify-content: center; gap: 14px; }
+  .hero .dots span { width: 68px; height: 68px; border-radius: 50%; border: 5px solid var(--bg); box-shadow: var(--shadow); }
+  .d1 { background: #22b573; } .d2 { background: var(--accent); } .d3 { background: #ef476f; }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 30px 18px 0; }
+
+  .goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-top: 26px; }
+  .goal { display: flex; align-items: flex-start; gap: 8px; background: #fff; border-radius: 12px;
+          padding: 10px 14px; font-size: 14px; box-shadow: var(--shadow); border-left: 4px solid var(--primary); }
+  .goal:nth-child(2) { border-left-color: #22b573; }
+  .goal:nth-child(3) { border-left-color: var(--accent); }
+  .goal .g-n { font-weight: 800; color: var(--primary); }
+  .goal:nth-child(2) .g-n { color: #158a56; }
+  .goal:nth-child(3) .g-n { color: #c98a00; }
+
+  .section-title { display: flex; align-items: center; gap: 10px; margin: 36px 0 18px; font-size: 20px; font-weight: 700; }
+  .section-title .num { width: 34px; height: 34px; border-radius: 10px; background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px;
+          border-top: 5px solid var(--primary); transition: transform .2s; }
+  .card:hover { transform: translateY(-4px); }
+  .card.green { border-top-color: #22b573; }
+  .card.yellow { border-top-color: var(--accent); }
+  .card.pink { border-top-color: #ef476f; }
+  .card.purple { border-top-color: #9d4edd; }
+  .word { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .word .en { font-size: 25px; font-weight: 800; color: var(--primary-dark); font-family: Consolas, monospace; }
+  .card.green .word .en { color: #158a56; }
+  .card.yellow .word .en { color: #c98a00; }
+  .card.pink .word .en { color: #d63a63; }
+  .card.purple .word .en { color: #7b3fbf; }
+  .word .ipa { font-size: 15px; color: var(--muted); }
+  .word .cn { font-size: 16px; font-weight: 600; }
+  .speak-btn {
+    display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-left: auto;
+    background: linear-gradient(135deg, #4f6ef7, #7c5cf0); color: #fff; border: none; border-radius: 50%;
+    font-size: 15px; cursor: pointer; box-shadow: 0 3px 10px rgba(79,110,247,.32);
+    -webkit-tap-highlight-color: transparent; transition: transform .15s, box-shadow .15s, background .25s;
+    font-family: inherit; flex-shrink: 0; line-height: 1;
+  }
+  .speak-btn:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(79,110,247,.42); }
+  .speak-btn:active { transform: scale(0.94); }
+  .speak-btn.playing { background: linear-gradient(135deg, #158a56, #2ec27e); animation: pulse 1s infinite; }
+  .speak-btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(46,194,126,.55); } 50% { box-shadow: 0 0 0 8px rgba(46,194,126,0); } }
+  .card ul { list-style: none; margin-top: 12px; }
+  .card ul li { padding-left: 20px; position: relative; font-size: 14.5px; margin-top: 6px; color: #3c4152; }
+  .card ul li::before { content: ""; position: absolute; left: 2px; top: 9px; width: 8px; height: 8px;
+    border-radius: 50%; background: var(--primary); opacity: .6; }
+  .card.green ul li::before { background: #22b573; }
+  .card.yellow ul li::before { background: var(--accent); }
+  .card.pink ul li::before { background: #ef476f; }
+  .card.purple ul li::before { background: #9d4edd; }
+
+  .param-note { margin-top: 14px; background: #eef2ff; border-radius: 10px; padding: 10px 14px;
+                font-size: 13.5px; color: var(--primary-dark); }
+  .param-note + .param-note { margin-top: 10px; }
+  .param-note b { font-family: Consolas, monospace; }
+  .param-note.warn { background: #fff7e6; color: #8a5a00; }
+
+  pre { background: var(--code-bg); color: var(--code-text); border-radius: 12px; padding: 16px 18px;
+        overflow-x: auto; font-family: Consolas, "Courier New", monospace; font-size: 14px; line-height: 1.8; margin-top: 12px; }
+  pre .kw { color: #c792ea; } pre .fn { color: #82aaff; } pre .str { color: #c3e88d; }
+  pre .num { color: #f78c6c; } pre .cm { color: #676e95; }
+
+  .project { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 22px; }
+  .project h3 { font-size: 18px; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .project h3 .tag { font-size: 12px; font-weight: 600; background: #fff3d6; color: #9a6b00; padding: 2px 10px; border-radius: 999px; }
+  .project .desc { font-size: 14.5px; color: #3c4152; margin-top: 8px; }
+  .project .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; margin-top: 12px; }
+  .step { display: flex; align-items: flex-start; gap: 8px; background: #f6f7fb; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+  .step .n { width: 22px; height: 22px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 12px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+
+  .preview { margin-top: 14px; border-radius: 12px; overflow: hidden; border: 1px solid #e5e8f2; background: #fff; }
+  .pv-bar { display: flex; align-items: center; gap: 6px; background: #2a2a3e; padding: 8px 12px; }
+  .pv-bar i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .pv-bar .r { background: #ff5f57; } .pv-bar .y { background: #febc2e; } .pv-bar .g { background: #28c840; }
+  .pv-bar span { font-size: 12px; color: #9aa0c0; margin-left: 6px; }
+  .pv-bar .run-btn { margin-left: auto; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+    color: #fff; font-family: inherit; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+  .pv-bar .run-btn:hover { background: rgba(255,255,255,.26); }
+  /* 控制台输出预览（print / input 类程序） */
+  .pv-body { padding: 16px 18px; font-family: Consolas, "Courier New", monospace; font-size: 14.5px; line-height: 1.9;
+             color: #e6e6ef; background: #1e1e2e; white-space: pre; overflow-x: auto; }
+  .pv-body .say { color: #82aaff; }
+  /* 海龟画布预览（turtle 类程序） */
+  .pv-canvas { padding: 26px 16px 20px; background: #fbfcff; }
+  .track { display: flex; align-items: center; height: 44px; border-left: 2px dashed #d8def5; }
+  .seg { height: 20px; width: 0; flex: 0 0 auto; border-radius: 3px; box-shadow: inset 0 -2px 0 rgba(0,0,0,.10); }
+  .seg.thin { border-radius: 0; box-shadow: none; }
+  .seg-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px dashed #e5e8f2; }
+  .chip { display: flex; align-items: center; gap: 6px; background: #f6f7fb; border-radius: 999px;
+          padding: 4px 12px; font-size: 12.5px; color: #4b5165; }
+  .chip i { width: 12px; height: 12px; border-radius: 3px; display: block; }
+  .chip b { font-family: Consolas, monospace; color: #3c4152; }
+
+  .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .sw { display: flex; align-items: center; gap: 7px; border: 1px solid #e5e8f2; border-radius: 999px;
+        padding: 4px 12px 4px 5px; font-size: 12.5px; font-family: Consolas, monospace; background: #fff; }
+  .sw i { width: 18px; height: 18px; border-radius: 50%; display: block; border: 1px solid rgba(0,0,0,.08); }
+  .subhead { font-size: 14.5px; font-weight: 700; margin-top: 16px; }
+
+  footer { text-align: center; margin-top: 44px; font-size: 13px; color: var(--muted); }
+
+  .back-btn { position: fixed; top: 16px; left: 16px; z-index: 999; display: inline-flex; align-items: center; gap: 6px;
+    background: #fff; color: var(--primary-dark); border: 1px solid #dfe4ff; border-radius: 999px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700; font-family: inherit; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(79,110,247,.22); transition: transform .15s; }
+  .back-btn:hover { transform: translateY(-2px); }
+  .pdf-btn { position: fixed; top: 16px; right: 16px; z-index: 999; display: inline-flex; align-items: center; gap: 7px;
+    background: #fff; color: var(--primary-dark); border: 1px solid #dfe4ff; border-radius: 999px;
+    padding: 9px 16px; font-size: 14px; font-weight: 700; font-family: inherit;
+    box-shadow: 0 4px 16px rgba(79,110,247,.22); cursor: pointer; }
+  .pdf-btn:hover { transform: translateY(-2px); }
+  .pdf-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .toast { position: fixed; left: 50%; bottom: 26px; z-index: 1000; transform: translateX(-50%) translateY(14px);
+    background: rgba(43,47,58,.95); color: #fff; font-size: 13.5px; line-height: 1.6; text-align: center;
+    padding: 10px 16px; border-radius: 12px; max-width: 88vw; opacity: 0; pointer-events: none;
+    box-shadow: 0 6px 22px rgba(0,0,0,.2); transition: opacity .25s, transform .25s; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 34px 16px 60px; }
+    .hero .dots span { width: 52px; height: 52px; }
+    pre { font-size: 13px; padding: 14px; }
+    .speak-btn { width: 28px; height: 28px; font-size: 13px; }
+    .back-btn { top: 10px; left: 10px; padding: 8px 13px; font-size: 13px; }
+    .pdf-btn { top: 10px; right: 10px; padding: 8px 13px; font-size: 13px; }
+    .pv-canvas { padding: 22px 12px 16px; }
+  }
+
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { background: #fff !important; } body { padding-bottom: 0; }
+    .pdf-btn, .toast, .speak-btn, .run-btn, .back-btn { display: none !important; }
+    .hero { padding: 26px 12px 46px !important; }
+    .hero .dots span { border-color: #fff !important; }
+    .container { max-width: 100%; padding: 18px 0 0; }
+    .card, .project, pre, .preview, .param-note, .step, .goal { break-inside: avoid; page-break-inside: avoid; box-shadow: none !important; }
+    .card, .project, .goal { border: 1px solid #e5e8f2; }
+    .section-title { break-after: avoid; page-break-after: avoid; margin: 22px 0 12px; }
+    .card:hover { transform: none; } .cards { gap: 12px; } .seg { transition: none !important; }
+  }
+
+  /* ---- 课次翻页导航 ---- */
+  .lesson-nav{display:flex;justify-content:space-between;align-items:center;gap:9px;
+    margin:26px 0 16px;padding-top:18px;border-top:1px dashed #d8def0}
+  .lesson-nav a{flex:1;text-align:center;background:#fff;border:1px solid #e2e8f8;
+    border-radius:10px;padding:11px 6px;font-size:13px;color:#4f6ef7;
+    text-decoration:none;font-weight:600;line-height:1.3}
+  .lesson-nav a:active{transform:scale(.97)}
+  .lesson-nav a.dis{color:#b6bfd4;background:#f7f9ff;border-color:#eef1f8;pointer-events:none}
+  @media (max-width:420px){ .lesson-nav a{font-size:12px;padding:10px 4px} }
+  @media print{ .lesson-nav{display:none} }
+</style>
+</head>
+<body>
+
+<a class="back-btn" href="../">← 目录</a>
+<button class="pdf-btn" id="pdfBtn" type="button" title="保存为 PDF">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/>
+  </svg>
+  下载 PDF
+</button>
+<div class="toast" id="toast"></div>
+
+<div class="hero">
+  <div class="lesson-tag">超级猜猜猜 · 第8课</div>
+  <h1>条件判断与比较运算知识点复习</h1>
+  <p class="sub">if 条件 · 比较运算符 · int 转换 · True / False</p>
+  <div class="dots"><span class="d1"></span><span class="d2"></span><span class="d3"></span></div>
+</div>
+
+<div class="container">
+  <!-- 本课目标 -->
+  <div class="goals">
+    <div class="goal"><span class="g-n">01</span><span>学习 <strong>if 条件语句</strong></span></div>
+    <div class="goal"><span class="g-n">02</span><span>掌握<strong>比较运算符</strong>的用法</span></div>
+    <div class="goal"><span class="g-n">03</span><span>学习 <strong>int()</strong> 转为整型函数</span></div>
+  </div>
+
+  <!-- 一、核心知识点 -->
+  <div class="section-title"><span class="num">1</span>核心知识点</div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="word"><span class="en">if 条件:</span><span class="ipa">[ɪf]</span><span class="cn">如果</span><button type="button" class="speak-btn" data-en="if" aria-label="朗读 if">🔊</button></div>
+      <ul>
+        <li><strong>先判断，再决定</strong>是否执行某段代码</li>
+        <li>条件成立（True）才运行<strong>缩进</strong>的代码块</li>
+        <li>条件后必须加<strong>冒号 :</strong></li>
+        <li>是<strong>单分支</strong>：不成立就跳过，继续往下</li>
+      </ul>
+      <pre><span class="kw">if</span> a == b:                  <span class="cm"># 条件成立才执行</span>
+    <span class="fn">print</span>(<span class="str">"对了"</span>)            <span class="cm"># 缩进属于 if</span></pre>
+    </div>
+
+    <div class="card green">
+      <div class="word"><span class="en">== 等于</span><span class="ipa">[ˈiːkwəl]</span><span class="cn">等于</span><button type="button" class="speak-btn" data-en="equal" aria-label="朗读 equal">🔊</button></div>
+      <ul>
+        <li>比较左右两边<strong>是否相等</strong></li>
+        <li>结果是 <strong>True</strong> 或 <strong>False</strong></li>
+        <li>注意是两个等号 <strong>==</strong>，不是赋值 =</li>
+        <li>常写在 if 的<strong>条件</strong>里</li>
+      </ul>
+      <pre><span class="kw">if</span> a == b:                  <span class="cm"># 相等为 True</span>
+    <span class="fn">print</span>(<span class="str">"对了"</span>)</pre>
+    </div>
+
+    <div class="card yellow">
+      <div class="word"><span class="en">&gt; 大于 / &lt; 小于</span><span class="ipa">[ɡreɪtə] [les]</span><span class="cn">大于 / 小于</span><button type="button" class="speak-btn" data-en="greater" aria-label="朗读 greater">🔊</button></div>
+      <ul>
+        <li><strong>&gt;</strong>：左边<strong>大于</strong>右边时为 True</li>
+        <li><strong>&lt;</strong>：左边<strong>小于</strong>右边时为 True</li>
+        <li>结果同样只有 True 或 False</li>
+        <li>本课本用来判断“猜大了 / 猜小了”</li>
+      </ul>
+      <pre><span class="kw">if</span> a &gt; b:                   <span class="cm"># 答案比猜测大 → 小了</span>
+    <span class="fn">print</span>(<span class="str">"小了"</span>)
+<span class="kw">if</span> a &lt; b:                   <span class="cm"># 答案比猜测小 → 大了</span>
+    <span class="fn">print</span>(<span class="str">"大了"</span>)</pre>
+    </div>
+
+    <div class="card pink">
+      <div class="word"><span class="en">int()</span><span class="ipa">[ɪnt]</span><span class="cn">整数</span><button type="button" class="speak-btn" data-en="int" aria-label="朗读 int">🔊</button></div>
+      <ul>
+        <li>把内容<strong>转换成整数</strong>（整型）</li>
+        <li>input() 得到的是<strong>字符串</strong>，要先转</li>
+        <li>例：<strong>b = int(input("数字："))</strong></li>
+        <li>转成数字后才能做<strong>大小比较</strong></li>
+      </ul>
+      <pre>b = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"请输入数字:"</span>))  <span class="cm"># 字符串转整数</span></pre>
+    </div>
+
+    <div class="card purple">
+      <div class="word"><span class="en">True / False</span><span class="ipa">[truː] [fɔːls]</span><span class="cn">真 / 假</span><button type="button" class="speak-btn" data-en="true" aria-label="朗读 true">🔊</button></div>
+      <ul>
+        <li>比较运算的结果<strong>只有两种</strong></li>
+        <li>条件成立是 <strong>True（真）</strong></li>
+        <li>条件不成立是 <strong>False（假）</strong></li>
+        <li>if 就是看结果是 True 还是 False</li>
+      </ul>
+      <pre><span class="fn">print</span>(<span class="num">3</span> &gt; <span class="num">2</span>)              <span class="cm"># 输出 True</span></pre>
+    </div>
+
+  </div>
+
+  <div class="param-note">
+    💡 <strong>if 的写法</strong>：<b>if 条件:</b> 后面加冒号，下一行<strong>缩进</strong>写要执行的代码；条件为 True 才运行缩进块。
+  </div>
+  <div class="param-note warn">
+    💡 <strong>== 与 = 不同</strong>：<b>==</b> 是“等于”比较，<b>=</b> 是“赋值”，两者千万别写混，否则条件永远不对。
+  </div>
+  <div class="param-note warn">
+    💡 <strong>先转数字再比</strong>：<b>input()</b> 得到的是字符串，比较数字前要用 <b>int()</b> 转成整数，否则比的是文字而不是大小。
+  </div>
+
+  <!-- 二、本课英文单词表 -->
+  <div class="section-title"><span class="num">2</span>本课英文单词表</div>
+  <div class="cards">
+    <div class="card">
+      <div class="word"><span class="en">if</span><span class="ipa">[ɪf]</span><span class="cn">如果</span><button type="button" class="speak-btn" data-en="if" aria-label="朗读 if">🔊</button></div>
+    </div>
+    <div class="card green">
+      <div class="word"><span class="en">int</span><span class="ipa">[ɪnt]</span><span class="cn">整数</span><button type="button" class="speak-btn" data-en="int" aria-label="朗读 int">🔊</button></div>
+    </div>
+    <div class="card yellow">
+      <div class="word"><span class="en">input</span><span class="ipa">[ˈɪnpʊt]</span><span class="cn">输入</span><button type="button" class="speak-btn" data-en="input" aria-label="朗读 input">🔊</button></div>
+    </div>
+    <div class="card pink">
+      <div class="word"><span class="en">print</span><span class="ipa">[prɪnt]</span><span class="cn">打印</span><button type="button" class="speak-btn" data-en="print" aria-label="朗读 print">🔊</button></div>
+    </div>
+    <div class="card purple">
+      <div class="word"><span class="en">true</span><span class="ipa">[truː]</span><span class="cn">真</span><button type="button" class="speak-btn" data-en="true" aria-label="朗读 true">🔊</button></div>
+    </div>
+    <div class="card">
+      <div class="word"><span class="en">false</span><span class="ipa">[fɔːls]</span><span class="cn">假</span><button type="button" class="speak-btn" data-en="false" aria-label="朗读 false">🔊</button></div>
+    </div>
+  </div>
+
+  <!-- 三、程序参考 -->
+  <div class="section-title"><span class="num">3</span>程序参考 · 超级猜猜猜</div>
+
+  <!-- 猜数字 -->
+  <div class="project">
+    <h3>🔢 猜数字游戏<span class="tag">猜数字 · if + 比较 + int</span></h3>
+    <div class="steps">
+      <div class="step"><span class="n">1</span>第一步：设定答案 a = 20</div>
+      <div class="step"><span class="n">2</span>第二步：int(input()) 让玩家输入数字</div>
+      <div class="step"><span class="n">3</span>第三步：用 == / &gt; / &lt; 比较，if 输出对应提示</div>
+    </div>
+    <pre>a = <span class="num">20</span>                                       <span class="cm"># 正确答案</span>
+b = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"请输入1-100的数字:"</span>))        <span class="cm"># 输入并转成整数</span>
+<span class="kw">if</span> a == b:                                    <span class="cm"># 猜对了</span>
+    <span class="fn">print</span>(<span class="str">"对了"</span>)
+<span class="kw">if</span> a &gt; b:                                     <span class="cm"># 答案比猜测大</span>
+    <span class="fn">print</span>(<span class="str">"小了"</span>)
+<span class="kw">if</span> a &lt; b:                                     <span class="cm"># 答案比猜测小</span>
+    <span class="fn">print</span>(<span class="str">"大了"</span>)</pre>
+    <div class="preview">
+      <div class="pv-bar"><i class="r"></i><i class="y"></i><i class="g"></i><span>运行结果</span></div>
+      <div class="pv-body"><span class="say">请输入1-100的数字:</span>15
+小了</div>
+    </div>
+  </div>
+
+  <nav class="lesson-nav">
+    <a href="../P1-07/">← 上一课</a>
+    <a href="../">目录</a>
+    <a href="../P1-09/">下一课 →</a>
+  </nav>
+  <footer>P1-08 · 超级猜猜猜 学习手册复习页 · 每天看一遍，代码记得牢！</footer>
+</div>
+
+<script>
+var showToast = function () {};
+
+// ===== 单词朗读（本地 mp3 + 有道远端兜底）=====
+(function () {
+  var btns = document.querySelectorAll('.speak-btn');
+  if (!btns.length) return;
+  var REMOTE = function (w) { return 'https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=2'; };
+  function sayIt(btn) {
+    var w = btn.getAttribute('data-en');
+    var a3 = new Audio('https://dict.youdao.com/dictvoice?audio=' + encodeURIComponent(w) + '&type=1');
+    a3.preload = 'auto';
+    a3.addEventListener('ended', function () { btn.classList.remove('playing'); });
+    a3.addEventListener('error', function () {
+      btn.classList.remove('playing');
+      try {
+        if (!window.speechSynthesis) throw 0;
+        var u = new SpeechSynthesisUtterance(w);
+        u.lang = 'en-US'; u.rate = 0.9;
+        window.speechSynthesis.speak(u);
+      } catch (e) { showToast('当前网络不支持播放语音', 4000); }
+    });
+    a3.play().catch(function () { btn.classList.remove('playing'); });
+  }
+  function play(btn, url) {
+    btn.classList.add('playing');
+    var audio = new Audio(url);
+    audio.preload = 'auto';
+    var reset = function () { btn.classList.remove('playing'); };
+    audio.addEventListener('ended', reset);
+    audio.addEventListener('error', function () {
+      if (url !== REMOTE(btn.getAttribute('data-en'))) {
+        reset();
+        var a2 = new Audio(REMOTE(btn.getAttribute('data-en')));
+        a2.preload = 'auto';
+        a2.addEventListener('ended', reset);
+        a2.addEventListener('error', function () { reset(); sayIt(btn); });
+        a2.play().catch(reset);
+      } else { reset(); sayIt(btn); }
+    });
+    var p = audio.play();
+    if (p && p.catch) p.catch(function () { reset(); });
+  }
+  Array.prototype.forEach.call(btns, function (b) {
+    var word = b.getAttribute('data-en');
+    if (!word) return;
+    b.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      if (b.disabled) return;
+      play(b, '../audio/word-' + word + '.mp3');
+    });
+  });
+})();
+
+// ===== 海龟绘制动画（仅 .pv-canvas 中存在 .seg 时生效）=====
+(function () {
+  var canvases = document.querySelectorAll('.preview');
+  Array.prototype.forEach.call(canvases, function (pv) {
+    var segs = pv.querySelectorAll('.seg');
+    if (!segs.length) return;
+    var total = 0;
+    Array.prototype.forEach.call(segs, function (s) {
+      var len = parseFloat(s.getAttribute('data-len')) || 0;
+      var th = parseFloat(s.getAttribute('data-thick')) || 2;
+      s.style.height = th + 'px';
+      total += len;
+    });
+    function animate() {
+      Array.prototype.forEach.call(segs, function (s) { s.style.transition = 'none'; s.style.width = '0%'; });
+      var delay = 60;
+      Array.prototype.forEach.call(segs, function (s) {
+        var pct = (parseFloat(s.getAttribute('data-len')) || 0) / total * 100;
+        var dur = Math.max(260, pct * 9);
+        setTimeout(function () { s.style.transition = 'width ' + dur + 'ms linear'; s.style.width = pct + '%'; }, delay);
+        delay += dur;
+      });
+    }
+    Array.prototype.forEach.call(segs, function (s) {
+      s.style.width = ((parseFloat(s.getAttribute('data-len')) || 0) / total * 100) + '%';
+    });
+    var btn = pv.querySelector('.run-btn');
+    if (btn) btn.addEventListener('click', animate);
+  });
+})();
+
+// ===== 下载 / 打印 PDF =====
+(function () {
+  var btn = document.getElementById('pdfBtn');
+  var toast = document.getElementById('toast');
+  if (!btn) return;
+  var timer = null;
+  var pdfTimer = null;
+  showToast = function (msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(timer);
+    timer = setTimeout(function () { toast.classList.remove('show'); }, ms || 4500);
+  };
+  function pdfTip(msg, ms) {
+    if (!toast) return;
+    toast.textContent = msg; toast.classList.add('show');
+    clearTimeout(pdfTimer);
+    pdfTimer = setTimeout(function () { toast.classList.remove('show'); }, ms || 5000);
+  }
+  btn.addEventListener('click', function () {
+    var ua = navigator.userAgent || '';
+    var saved = document.title;
+    document.title = 'P1-08-超级猜猜猜复习';
+    if (/MicroMessenger/i.test(ua)) {
+      pdfTip('微信里请点右上角「…」→ 在浏览器打开，再点本按钮保存 PDF', 6000);
+    } else if (/iPhone|iPad|iPod/i.test(ua)) {
+      pdfTip('弹出预览后，点右上角分享 →「打印 / 存储到文件」即可存为 PDF', 6000);
+    } else if (/Android/i.test(ua)) {
+      pdfTip('打印界面里把「目标打印机」选成「另存为 PDF」再保存', 6000);
+    } else {
+      pdfTip('打印窗口里选择「另存为 PDF」，然后点保存', 6000);
+    }
+    setTimeout(function () { window.print(); }, 260);
+    setTimeout(function () { document.title = saved; }, 60000);
+  });
+})();
+</script>
+</body>
+</html>
